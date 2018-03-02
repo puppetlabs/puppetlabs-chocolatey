@@ -1,5 +1,6 @@
 #require 'ruby-prof'
 #RubyProf.start
+require 'beaker-rspec'
 
 IDEAL_CONSOLE_WIDTH = 72
 def horizontal_rule(width = 5)
