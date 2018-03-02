@@ -2,7 +2,6 @@ require 'pry' if Bundler.rubygems.find_name('pry').any?
 require 'puppetlabs_spec_helper/module_spec_helper'
 require 'rake'
 require 'fileutils'
-require 'beaker-rspec'
 
 RSpec.configure do |c|
   # set the environment variable before files are loaded, otherwise it is too late
