@@ -1,6 +1,26 @@
+# Not sure if these are still neeed.
 require 'net/http'
 require 'uri'
 require 'nokogiri'
+
+require 'beaker-rspec'
+require 'beaker/puppet_install_helper'
+require 'beaker/module_install_helper'
+
+run_puppet_install_helper
+
+install_ca_certs
+
+proj_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+
+hosts.each do |host|
+  install_module_dependencies_on(host)
+  install_dev_puppet_module_on(host, :source => proj_root, :module_name => 'chocolatey')
+end
+
+def windows_agents
+  agents.select { |agent| agent['platform'].include?('windows') }
+end
 
 $chocolatey_latest_info_url = "http://nexus.delivery.puppetlabs.net/service/local/nuget/choco-pipeline-tests/Packages()?$filter=((Id%20eq%20%27chocolatey%27)%20and%20(not%20IsPrerelease))%20and%20IsLatestVersion"
 
