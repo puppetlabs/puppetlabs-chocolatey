@@ -1,4 +1,3 @@
-require 'chocolatey_helper'
 test_name 'MODULES-3037 - Disable an Existing Source'
 confine(:to, :platform => 'windows')
 
@@ -40,4 +39,5 @@ agents.each do |agent|
 
   end
 end
+
 

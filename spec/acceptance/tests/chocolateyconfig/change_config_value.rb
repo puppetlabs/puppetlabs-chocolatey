@@ -1,4 +1,3 @@
-require 'chocolatey_helper'
 test_name 'MODULES-3035 - Config Settings Change Config Value'
 confine(:to, :platform => 'windows')
 
@@ -44,3 +43,4 @@ agents.each do |agent|
     assert_match(/tim/, get_xml_value("//config/add[@key='proxyUser']/@value", result.output).to_s, 'Value did not change')
   end
 end
+

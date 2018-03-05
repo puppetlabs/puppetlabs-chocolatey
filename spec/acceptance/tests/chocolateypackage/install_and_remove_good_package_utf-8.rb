@@ -1,12 +1,11 @@
-# require 'chocolatey_helper'
 # require 'beaker-windows'
 # test_name 'MODULES-3037 - C97738 Install known good package with utf-8 via manifest and remove via manifest'
 # confine(:to, :platform => 'windows')
 #
 # # arrange
-# package_name = '竹ChocolateyGUIÖ'
+# package_name = '???ChocolateyGUI??'
 # package_exe_path = %{C:\\'Program Files (x86)\\ChocolateyGUI\\ChocolateyGUI.exe'}
-# software_uninstall_command = %{msiexec /x C:\\ProgramData\\chocolatey\\lib\\竹ChocolateyGUIÖ\\tools\\竹ChocolateyGUIÖ.msi /q}.force_encoding("ASCII-8BIT")
+# software_uninstall_command = %{msiexec /x C:\\ProgramData\\chocolatey\\lib\\???ChocolateyGUI??\\tools\\???ChocolateyGUI??.msi /q}.force_encoding("ASCII-8BIT")
 #
 # chocolatey_package_manifest = <<-PP
 #   package { "#{package_name}":
@@ -63,3 +62,4 @@
 #     assert_match(/Stage\[main\]\/Main\/Package\[#{package_name}\]\/ensure\: removed/, result.stdout, "stdout did not report package removal of #{package_name}")
 #   end
 # end
+

@@ -1,4 +1,3 @@
-require 'chocolatey_helper'
 test_name 'MODULES-3035 - Remove Value From Config Setting'
 confine(:to, :platform => 'windows')
 
@@ -26,3 +25,4 @@ agents.each do |agent|
     assert_not_match(/.+/, get_xml_value("//config/add[@key='commandExecutionTimeoutSeconds']/@value", result.output).to_s, 'Value did not match')
   end
 end
+

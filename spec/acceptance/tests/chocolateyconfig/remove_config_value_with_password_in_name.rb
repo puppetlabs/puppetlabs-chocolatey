@@ -1,4 +1,3 @@
-require 'chocolatey_helper'
 test_name 'MODULES-3035 - Config Settings Remove Value with Password in Name'
 confine(:to, :platform => 'windows')
 
@@ -48,3 +47,4 @@ agents.each do |agent|
     assert_not_match(/.+/, get_xml_value("//config/add[@key='proxyPassword']/@value", result.output).to_s, 'Value should have been removed')
   end
 end
+

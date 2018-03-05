@@ -1,4 +1,3 @@
-require 'chocolatey_helper'
 require 'beaker-windows'
 test_name 'MODULES-3037 - 97729 Install known good package via manifest and remove via manifest'
 confine(:to, :platform => 'windows')
@@ -59,4 +58,5 @@ apply_manifest(chocolatey_package_manifest, :catch_failures => true) do |result|
 #validate
   assert_match(/Stage\[main\]\/Main\/Package\[#{package_name}\]\/ensure\: removed/, result.stdout, "stdout did not report package removal of #{package_name}")
 end
+
 

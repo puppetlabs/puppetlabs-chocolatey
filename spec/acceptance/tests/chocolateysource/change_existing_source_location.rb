@@ -1,4 +1,3 @@
-require 'chocolatey_helper'
 test_name 'MODULES-3037 - Change Source Location for an Existing Source'
 confine(:to, :platform => 'windows')
 
@@ -28,3 +27,4 @@ agents.each do |agent|
     #todo should also verify there are no duplicates
   end
 end
+

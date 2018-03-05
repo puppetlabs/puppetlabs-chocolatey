@@ -1,4 +1,3 @@
-require 'chocolatey_helper'
 test_name 'MODULES-3037 - Disable an Existing Source'
 confine(:to, :platform => 'windows')
 
@@ -26,3 +25,4 @@ agents.each do |agent|
     assert_match(/true/, get_xml_value("//sources/source[@id='chocolatey']/@disabled", result.output).to_s, 'Disabled did not match')
   end
 end
+

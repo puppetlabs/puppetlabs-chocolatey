@@ -1,4 +1,3 @@
-require 'chocolatey_helper'
 test_name 'MODULES-3037 - Change Existing Priority'
 confine(:to, :platform => 'windows')
 
@@ -48,4 +47,5 @@ agents.each do |agent|
     assert_match(/5/, get_xml_value("//sources/source[@id='chocolatey']/@priority", result.output).to_s, 'Priority change did not match')
   end
 end
+
 

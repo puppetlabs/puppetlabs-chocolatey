@@ -1,4 +1,3 @@
-require 'chocolatey_helper'
 test_name 'MODULES-3035 - Ensure Config Value with Password In Name'
 confine(:to, :platform => 'windows')
 
@@ -48,3 +47,4 @@ agents.each do |agent|
     assert_match(password, get_xml_value("//config/add[@key='proxyPassword']/@value", result.output).to_s, 'Value should not have changed')
   end
 end
+

@@ -1,4 +1,3 @@
-require 'chocolatey_helper'
 test_name 'MODULES-3034 - Disable an Enabled Feature'
 confine(:to, :platform => 'windows')
 
@@ -33,3 +32,4 @@ agents.each do |agent|
     assert_match(/false/, get_xml_value("//features/feature[@name='checksumFiles']/@enabled", result.output).to_s, 'Was not found disabled')
   end
 end
+

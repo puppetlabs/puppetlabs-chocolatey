@@ -1,4 +1,3 @@
-require 'chocolatey_helper'
 test_name 'MODULES-3035 - Add New Config Item'
 confine(:to, :platform => 'windows')
 
@@ -27,3 +26,5 @@ agents.each do |agent|
     assert_match(/this guy/, get_xml_value("//config/add[@key='hello123']/@value", result.output).to_s, 'Value did not match')
   end
 end
+
+

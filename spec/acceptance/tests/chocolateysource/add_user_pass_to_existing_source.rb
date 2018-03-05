@@ -1,4 +1,3 @@
-require 'chocolatey_helper'
 test_name 'MODULES-3037 - Add User/Password to an Existing Source'
 confine(:to, :platform => 'windows')
 
@@ -31,3 +30,4 @@ agents.each do |agent|
     assert_match(/.+/, get_xml_value("//sources/source[@id='chocolatey']/@password", result.output).to_s, 'Password was not saved')
   end
 end
+

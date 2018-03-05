@@ -1,4 +1,3 @@
-require 'chocolatey_helper'
 test_name 'MODULES-3037 - Remove an Existing Source'
 confine(:to, :platform => 'windows')
 
@@ -26,3 +25,4 @@ agents.each do |agent|
     assert_not_match(/chocolatey/, get_xml_value("//sources/source[@id='chocolatey']/@id", result.output).to_s, 'Source was not removed')
   end
 end
+

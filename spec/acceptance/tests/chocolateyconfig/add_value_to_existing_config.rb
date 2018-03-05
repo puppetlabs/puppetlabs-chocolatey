@@ -1,4 +1,3 @@
-require 'chocolatey_helper'
 test_name 'MODULES-3035 - Add a Value to an Existing Config Setting'
 confine(:to, :platform => 'windows')
 
@@ -27,3 +26,5 @@ agents.each do |agent|
     assert_match(/https\:\/\/somewhere/, get_xml_value("//config/add[@key='proxy']/@value", result.output).to_s, 'Value did not match')
   end
 end
+
+

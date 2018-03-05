@@ -1,4 +1,3 @@
-require 'chocolatey_helper'
 test_name 'MODULES-3430 - Add Source Sad Path: Fail to apply manifest without location'
 confine(:to, :platform => 'windows')
 
@@ -22,3 +21,4 @@ apply_manifest(chocolatey_src, :expect_failures => true) do
   step 'Verify failure'
   assert_match(/Error: Validation of Chocolateysource\[chocolatey\] failed: A non-empty location/, stderr, "stderr did not match expected")
 end
+

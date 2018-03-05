@@ -1,4 +1,3 @@
-require 'chocolatey_helper'
 test_name 'MODULES-3037 - Add Source Sad Path: Fail to apply bad manifest'
 confine(:to, :platform => 'windows')
 
@@ -23,3 +22,4 @@ apply_manifest(chocolatey_src, :expect_failures => true) do
   step 'Verify Failure'
   assert_match(/Error: Parameter ensure failed on Chocolateysource\[test\]: Invalid value "sad"/, stderr, "stderr did not match expected")
 end
+

@@ -1,4 +1,3 @@
-require 'chocolatey_helper'
 test_name 'MODULES-3037 - Remove User/Password From an Existing Source'
 confine(:to, :platform => 'windows')
 
@@ -51,3 +50,4 @@ agents.each do |agent|
     assert_not_match(/.+/, get_xml_value("//sources/source[@id='chocolatey']/@password", result.output).to_s, 'Password was not removed')
   end
 end
+
