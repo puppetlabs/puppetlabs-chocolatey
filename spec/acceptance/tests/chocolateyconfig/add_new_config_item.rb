@@ -1,30 +1,35 @@
-test_name 'MODULES-3035 - Add New Config Item'
+require 'spec_helper_acceptance'
+
 confine(:to, :platform => 'windows')
 
-backup_config
+before(:each) do
+  backup_config
+end
 
-# arrange
-chocolatey_src = <<-PP
-  chocolateyconfig {'hello123':
-    ensure => present,
-    value  => 'this guy',
-  }
-PP
-
-# teardown
-teardown do
+after(:each) do
   reset_config
 end
 
-# act
-step 'Apply manifest'
-apply_manifest(chocolatey_src, :catch_failures => true)
 
-step 'Verify results'
-agents.each do |agent|
-  on(agent, "cmd.exe /c \"type #{config_file_location}\"") do |result|
-    assert_match(/this guy/, get_xml_value("//config/add[@key='hello123']/@value", result.output).to_s, 'Value did not match')
+context 'Chocolatey Config' do
+  context 'MODULES-3035 - Add New Config Item' do
+
+    # arrange
+    chocolatey_src = <<-PP
+      chocolateyconfig {'hello123':
+        ensure => present,
+        value  => 'this guy',
+      }
+    PP
+
+    execute_manifest(chocolatey_src, :catch_failures => true)
+
+    agents.each do |agent|
+      on(agent, "cmd.exe /c \"type #{config_file_location}\"") do |result|
+        it "Should create the expected key" do
+          expect(get_xml_value("//config/add[@key='hello123']/@value", result.output).to match(/this guy/)
+        end
+      end
+    end
   end
 end
-
-
