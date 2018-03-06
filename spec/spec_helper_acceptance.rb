@@ -17,6 +17,7 @@ PROJ_ROOT = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 
 hosts.each do |host|
   install_module_dependencies_on(host)
+  install_module_on(host)
 end
 
 def windows_agents
