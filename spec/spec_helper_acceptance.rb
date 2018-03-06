@@ -7,6 +7,8 @@ require 'beaker-rspec'
 require 'beaker/puppet_install_helper'
 require 'beaker/module_install_helper'
 require 'beaker/ca_cert_helper'
+require 'beaker/testmode_switcher'
+require 'beaker/testmode_switcher/dsl'
 
 run_puppet_install_helper
 install_ca_certs
