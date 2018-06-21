@@ -60,34 +60,15 @@
 # @param [String] chocolatey_version chocolatey version, falls back to
 #   `$::chocolateyversion`.
 class chocolatey (
-  $choco_install_location         = $::chocolatey::params::install_location,
-  $use_7zip                       = $::chocolatey::params::use_7zip,
-  $choco_install_timeout_seconds  = $::chocolatey::params::install_timeout_seconds,
-  $chocolatey_download_url        = $::chocolatey::params::download_url,
-  $enable_autouninstaller         = $::chocolatey::params::enable_autouninstaller,
-  $log_output                     = false,
-  $chocolatey_version             = $::chocolatey::params::chocolatey_version
+  Pattern['^\w\:']  $choco_install_location         = $::chocolatey::params::install_location,
+  Boolean $use_7zip                       = $::chocolatey::params::use_7zip,
+  Integer $choco_install_timeout_seconds  = $::chocolatey::params::install_timeout_seconds,
+  Pattern['^http\:\/\/','^https\:\/\/','file\:\/\/\/']  $chocolatey_download_url        = $::chocolatey::params::download_url,
+  Boolean $enable_autouninstaller         = $::chocolatey::params::enable_autouninstaller,
+  Boolean $log_output                     = false,
+  String  $chocolatey_version             = $::chocolatey::params::chocolatey_version
 ) inherits ::chocolatey::params {
 
-
-validate_string($choco_install_location)
-# lint:ignore:140chars
-validate_re($choco_install_location, '^\w\:',
-"Please use a full path for choco_install_location starting with a local drive. Reference choco_install_location => '${choco_install_location}'."
-)
-# lint:endignore
-
-  validate_bool($use_7zip)
-  validate_integer($choco_install_timeout_seconds)
-
-  validate_string($chocolatey_download_url)
-# lint:ignore:140chars
-  validate_re($chocolatey_download_url,['^http\:\/\/','^https\:\/\/','file\:\/\/\/'],
-    "For chocolatey_download_url, if not using the default '${::chocolatey::params::download_url}', please use a Http/Https/File Url that downloads 'chocolatey.nupkg'."
-  )
-# lint:endignore
-
-  validate_bool($enable_autouninstaller)
 
   if ((versioncmp($::clientversion, '3.4.0') >= 0) and (!defined('$::serverversion') or versioncmp($::serverversion, '3.4.0') >= 0)) {
     class { '::chocolatey::install': }
