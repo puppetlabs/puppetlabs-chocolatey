@@ -26,7 +26,7 @@ Puppet::Type.type(:chocolateyfeature).provide(:windows) do
   end
 
   def query
-    self.class.features.each do |feature|
+    self.class.all_features.each do |feature|
       return feature.properties if @resource[:name][/\A\S*/].downcase == feature.name.downcase
     end
 
@@ -64,7 +64,7 @@ Puppet::Type.type(:chocolateyfeature).provide(:windows) do
     feature
   end
 
-  def self.features
+  def self.all_features
     get_features.collect do |item|
       feature = get_feature(item)
       new(feature)
@@ -72,7 +72,7 @@ Puppet::Type.type(:chocolateyfeature).provide(:windows) do
   end
 
   def self.instances
-    features
+    all_features
   end
 
   def self.prefetch(resources)
@@ -119,7 +119,7 @@ Puppet::Type.type(:chocolateyfeature).provide(:windows) do
     @property_hash.clear
     @property_flush.clear
 
-    self.class.features
+    self.class.all_features
     @property_hash = query
   end
 
