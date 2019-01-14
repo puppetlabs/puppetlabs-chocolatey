@@ -164,8 +164,10 @@ Puppet::Type.type(:package).provide(:chocolatey, :parent => Puppet::Provider::Pa
   # the resource the method is called on.
   # Query provides the information for the single package identified by @Resource[:name].
   def query
-    self.class.instances.each do |package|
-      return package.properties if @resource[:name][/\A\S*/].downcase == package.name.downcase
+    if @resource[:name][/\A\S*/].downcase == @property_hash[:name]
+      self.class.instances.each do |package|
+        return package.properties if @resource[:name][/\A\S*/].downcase == package.name.downcase
+      end
     end
 
     return nil
@@ -194,19 +196,55 @@ Puppet::Type.type(:package).provide(:chocolatey, :parent => Puppet::Provider::Pa
       unless pin_output.nil?
         pin_output.split("\n").each { |pin| pins << pin.split('|')[0] }
       end
-
-      execpipe(listcmd) do |process|
-        process.each_line do |line|
-          line.chomp!
-          if line.empty? or line.match(/Reading environment variables.*/); next; end
-          raise Puppet::Error, "At least one source must be enabled." if line.match(/Unable to search for packages.*/)
-          if choco_exe
-            values = line.split('|')
-          else
-            values = line.split(' ')
+      if pins.length <= 1
+        list = []
+        begin
+          pkg_output = nil unless choco_exe
+          pkg_output = Puppet::Util::Execution.execute([command(:chocolatey), 'list', '-r']) if choco_exe
+          unless pkg_output.nil?
+            pkg_output.split("\n").each { |pkg| list << pkg }
           end
-          values[1] = :held if pins.include? values[0]
-          packages << new({ :name => values[0].downcase, :ensure => values[1], :provider => self.name })
+        rescue => e
+          raise Puppet::Error, "#{e.message}"
+        end
+
+        execpipe(listcmd) do |process|
+          process.each_line do |line|
+            line.chomp!
+            if line.empty? or line.match(/Reading environment variables.*/); next; end
+            raise Puppet::Error, "At least one source must be enabled." if line.match(/Unable to search for packages.*/)
+            if choco_exe
+              values = line.split('|')
+            else
+              values = line.split(' ')
+            end
+            values[1] = :held if list.include? values[0]
+            latest = values[1]
+            list.each do |pkg|
+              name1 = pkg.split('|')[0].downcase
+              name2 = values[0].downcase
+              version = Gem::Version.new(pkg.split('|')[1])
+              if (name2 == name1) and (Gem::Version.new(values[1]) < version)
+                latest = version
+              end
+            end
+            packages << new({:name => values[0].downcase, :ensure => values[1], :latest => latest, :provider => self.name})
+          end
+        end
+      else
+        execpipe(listcmd) do |process|
+          process.each_line do |line|
+            line.chomp!
+            if line.empty? or line.match(/Reading environment variables.*/); next; end
+            raise Puppet::Error, "At least one source must be enabled." if line.match(/Unable to search for packages.*/)
+            if choco_exe
+              values = line.split('|')
+            else
+              values = line.split(' ')
+            end
+            values[1] = :held if pins.include? values[0]
+            packages << new({:name => values[0].downcase, :ensure => values[1], :latest => '', :provider => self.name})
+          end
         end
       end
     rescue Puppet::ExecutionFailure
@@ -236,25 +274,29 @@ Puppet::Type.type(:package).provide(:chocolatey, :parent => Puppet::Provider::Pa
   end
 
   def latest
-    package_ver = ''
-    PuppetX::Chocolatey::ChocolateyCommon.set_env_chocolateyinstall
-    begin
-      execpipe(latestcmd) do |process|
-        process.each_line do |line|
-          line.chomp!
-          if line.empty?; next; end
-          if is_compiled_choco?
-            values = line.split('|')
-            package_ver = values[2]
-          else
-            # Example: ( latest        : 2013.08.19.155043 )
-            values = line.split(':').collect(&:strip).delete_if(&:empty?)
-            package_ver = values[1]
+    if @property_hash[:latest] == ''
+      package_ver = ''
+      PuppetX::Chocolatey::ChocolateyCommon.set_env_chocolateyinstall
+      begin
+        execpipe(latestcmd) do |process|
+          process.each_line do |line|
+            line.chomp!
+            if line.empty?; next; end
+            if is_compiled_choco?
+              values = line.split('|')
+              package_ver = values[2]
+            else
+              # Example: ( latest        : 2013.08.19.155043 )
+              values = line.split(':').collect(&:strip).delete_if(&:empty?)
+              package_ver = values[1]
+            end
           end
         end
+      rescue Puppet::ExecutionFailure
+        return nil
       end
-    rescue Puppet::ExecutionFailure
-      return nil
+    else
+      package_ver = @property_hash[:latest]
     end
 
     package_ver
