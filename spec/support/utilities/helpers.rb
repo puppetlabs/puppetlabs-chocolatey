@@ -3,6 +3,9 @@ CHOCOLATEY_LATEST_INFO_URL = "https://artifactory.delivery.puppetlabs.net/artifa
 def get_latest_chocholatey_download_url
   uri = URI.parse(CHOCOLATEY_LATEST_INFO_URL)
 
+  # For some reason, the first time you hit the URL it gives you the wrong version.
+  # The second time you hit the URL it gives you the latest version.
+  response = Net::HTTP.get_response(uri)
   response = Net::HTTP.get_response(uri)
   xml_str = Nokogiri::XML(response.body)
 
