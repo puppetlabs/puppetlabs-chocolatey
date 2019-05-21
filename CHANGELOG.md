@@ -5,6 +5,33 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [Unreleased]
 
+## [3.3.0] - 2019-03-19
+
+### Added
+
+- Warning note to package parameter documentation for `install_options` to clarify best practices for secrets management with this parameter ([MODULES-8491](https://tickets.puppetlabs.com/browse/MODULES-8491)).
+- Parameter `seven_zip_download_url` to make the source of the 7zip binary configurable, allowing the use of this module when the previously hardcoded URL cannot be reached ([MODULES-6652](https://tickets.puppetlabs.com/browse/MODULES-6652)). Thanks, [Daniel Helgenberger](https://github.com/helge000)!
+
+### Fixed
+
+- Ensure that `puppet resource chocolateyconfig` runs without erroring ([MODULES-8047].(https://tickets.puppetlabs.com/browse/MODULES-8047)).
+
+## [3.2.0] - 2019-02-19
+
+### Added
+
+- Configuration option for `chocolateysource` to allow bypassing any system-configured proxies ([MODULES-4418](https://tickets.puppetlabs.com/browse/MODULES-4418)).
+- Configuration option for `chocolateysource` to make a source visible only to Windows users in the Administrators group ([MODULES-5898](https://tickets.puppetlabs.com/browse/MODULES-5898)).
+- Configuration option for `chocolateysource` to make a source usable with Chocolatey Self Service ([MODULES-5897](https://tickets.puppetlabs.com/browse/MODULES-5897))
+- Install Chocolatey from behind a proxy. ([MODULES-5654](https://tickets.puppetlabs.com/browse/MODULES-5654)) Thanks, [Geoff Williams](https://github.com/GeoffWilliams)
+
+### Fixed
+
+- Ensure the `source` syntax in the provider is correct ([MODULES-8493](https://tickets.puppetlabs.com/browse/MODULES-8493)). Thanks, [@jcwest](https://github.com/jcwest)!
+- Ensure that if `usePackageExitCodes` is explicitly set to `true` in the Chocolatey configuration then it is observed ([MODULES-5383](https://tickets.puppetlabs.com/browse/MODULES-5383)). Thanks, [David Wood](https://github.com/davidtwco)!
+- Only initialize constant when not defined. ([MODULES-7068](https://tickets.puppetlabs.com/browse/MODULES-7068)). Thanks, [Bas Toonk](https://github.com/btoonk)!
+- Fix collision in type generation ([MODULES-6948](https://tickets.puppetlabs.com/browse/MODULES-6948)). Thanks [Rico Spiess](https://github.com/rico89)!
+
 ## [3.1.1] - 2018-12-10
 
 ### Changed
@@ -254,7 +281,9 @@ The puppetlabs-chocolatey module replaces the community chocolatey-chocolatey mo
 
 ## [0.2]
 
-[Unreleased]: https://github.com/puppetlabs/puppetlabs-chocolatey/compare/3.1.1...master
+[Unreleased]: https://github.com/puppetlabs/puppetlabs-chocolatey/compare/3.3.0...master
+[3.3.0]: https://github.com/puppetlabs/puppetlabs-chocolatey/compare/3.2.0...3.3.0
+[3.2.0]: https://github.com/puppetlabs/puppetlabs-chocolatey/compare/3.1.1...3.2.0
 [3.1.1]: https://github.com/puppetlabs/puppetlabs-chocolatey/compare/3.1.0...3.1.1
 [3.1.0]: https://github.com/puppetlabs/puppetlabs-chocolatey/compare/3.0.0...3.1.0
 [3.0.0]: https://github.com/puppetlabs/puppetlabs-chocolatey/compare/2.0.2...3.0.0
