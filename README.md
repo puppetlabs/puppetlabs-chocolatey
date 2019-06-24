@@ -41,6 +41,8 @@ This is a [Puppet](http://docs.puppet.com/) package provider for
 like apt-get, but for Windows. Check the module's metadata.json for
 compatible Puppet and Puppet Enterprise versions.
 
+Test change.
+
 ## Module Description
 
 This is the official module for working with the [Chocolatey](https://chocolatey.org/about)
