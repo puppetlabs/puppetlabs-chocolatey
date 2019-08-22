@@ -1,0 +1,30 @@
+name: ci
+
+on: [pull_request]
+
+jobs:
+  build:
+
+    runs-on: windows-2016
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Set up Ruby 2.6
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.5.x
+
+    - name: Install bundle
+      powershell: |
+        gem install bundler
+        bundle install --jobs 4 --retry 2 --without system_tests
+        Get-Content Gemfile.lock
+
+    - name: Run parallel_spec
+      powershell: |
+        bundle exec puppet -V
+        ruby -v
+        gem -v
+        bundle -v
+        bundle exec rake parallel_spec
