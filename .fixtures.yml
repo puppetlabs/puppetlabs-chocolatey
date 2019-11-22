@@ -1,7 +1,11 @@
 fixtures:
   forge_modules:
-    stdlib:       "puppetlabs/stdlib"
-    powershell:   "puppetlabs/powershell"
-    registry:     "puppetlabs/registry"
+    stdlib:       'puppetlabs/stdlib'
+    powershell:   'puppetlabs/powershell'
+    registry:     'puppetlabs/registry'
+  repositories:
+      facts: 'https://github.com/puppetlabs/puppetlabs-facts.git'
+      puppet_agent: 'https://github.com/puppetlabs/puppetlabs-puppet_agent.git'
+      provision: 'https://github.com/puppetlabs/provision.git'
   symlinks:
     chocolatey: "#{source_dir}"

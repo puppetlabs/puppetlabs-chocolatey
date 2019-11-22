@@ -1,16 +1,16 @@
 {
   "name": "puppetlabs-chocolatey",
-  "version": "3.3.0",
-  "author": "Puppet Inc",
+  "version": "5.0.0",
+  "author": "puppetlabs",
   "summary": "Chocolatey package provider for Puppet",
   "license": "Apache-2.0",
   "source": "https://github.com/puppetlabs/puppetlabs-chocolatey",
   "project_page": "https://github.com/puppetlabs/puppetlabs-chocolatey",
-  "issues_url": "https://tickets.puppet.com/CreateIssueDetails!init.jspa?pid=10707&issuetype=1&team=Modules&customfield_14200=14302&labels=triage&customfield_10005=2147&summary=Issue+found+with+module%3A+puppetlabs-chocolatey",
+  "issues_url": "https://tickets.puppetlabs.com/browse/MODULES",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.6.0 < 6.0.0"
+      "version_requirement": ">= 4.6.0 < 7.0.0"
     },
     {
       "name": "puppetlabs/powershell",
@@ -18,7 +18,7 @@
     },
     {
       "name": "puppetlabs/registry",
-      "version_requirement": ">= 1.0.0 < 3.0.0"
+      "version_requirement": ">= 1.0.0 < 4.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -40,7 +40,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.7.0 < 7.0.0"
+      "version_requirement": ">= 5.5.10 < 7.0.0"
     }
   ],
   "description": "Chocolatey package provider for Puppet",
@@ -56,7 +56,7 @@
     "chocolatey for business",
     "chocolatey professional"
   ],
-  "pdk-version": "1.8.0",
-  "template-url": "https://github.com/puppetlabs/pdk-templates",
-  "template-ref": "heads/master-0-g7281db5"
+  "pdk-version": "1.14.1",
+  "template-url": "https://github.com/puppetlabs/pdk-templates#master",
+  "template-ref": "heads/master-0-g1a92949"
 }

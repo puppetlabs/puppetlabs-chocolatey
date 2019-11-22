@@ -5,27 +5,29 @@ require 'puppet_x/chocolatey/chocolatey_install'
 describe 'choco_install_path fact' do
   subject(:fact) { Facter.fact(:choco_install_path) }
 
-  before :each do
+  let(:fact_value) { subject.value }
+
+  before(:each) do
+    skip 'Not on Windows platform' unless Puppet::Util::Platform.windows?
     Facter.clear
     Facter.clear_messages
   end
 
-  context "on Windows", :if => Puppet::Util::Platform.windows? do
-    it "should return the output of PuppetX::Chocolatey::ChocolateyInstall.install_path" do
-      expected_value = 'C:\somewhere'
-      PuppetX::Chocolatey::ChocolateyInstall.expects(:install_path).returns(expected_value)
+  context 'on Windows' do
+    it 'returns the output of PuppetX::Chocolatey::ChocolateyInstall.install_path' do
+      expect(PuppetX::Chocolatey::ChocolateyInstall).to receive(:install_path).and_return('C:\somewhere')
 
-      subject.value.must == expected_value
+      expect(fact_value).to eq('C:\somewhere')
     end
 
-    it "should return the default path when PuppetX::Chocolatey::ChocolateyInstall.install_path is nil" do
-      PuppetX::Chocolatey::ChocolateyInstall.expects(:install_path).returns(nil)
+    it 'returns the default path when PuppetX::Chocolatey::ChocolateyInstall.install_path is nil' do
+      expect(PuppetX::Chocolatey::ChocolateyInstall).to receive(:install_path).and_return(nil)
 
-      subject.value.must == 'C:\ProgramData\chocolatey'
+      expect(fact_value).to eq('C:\ProgramData\chocolatey')
     end
   end
 
-  after :each do
+  after(:each) do
     Facter.clear
     Facter.clear_messages
   end

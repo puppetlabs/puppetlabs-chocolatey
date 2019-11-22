@@ -5,27 +5,26 @@ require 'puppet_x/chocolatey/chocolatey_install'
 describe 'choco_temp_dir fact' do
   subject(:fact) { Facter.fact(:choco_temp_dir) }
 
-  before :each do
+  let(:fact_value) { subject.value }
+
+  before(:each) do
+    skip 'Not on Windows platform' unless Puppet::Util::Platform.windows?
     Facter.clear
     Facter.clear_messages
   end
 
-  it "should return the TEMP directory" do
-    skip ('Not on Windows platform') unless Puppet::Util::Platform.windows?
-    expected_value = 'waffles'
-    PuppetX::Chocolatey::ChocolateyInstall.expects(:temp_dir).returns(expected_value)
+  it 'returns the TEMP directory' do
+    expect(PuppetX::Chocolatey::ChocolateyInstall).to receive(:temp_dir).and_return('waffles')
 
-    subject.value.must == expected_value
+    expect(fact_value).to eq('waffles')
   end
-  it "should return the default path when PuppetX::Chocolatey::ChocolateyInstall.install_path is nil" do
-    skip ('Not on Windows platform') unless Puppet::Util::Platform.windows?
-    PuppetX::Chocolatey::ChocolateyInstall.expects(:temp_dir).returns(nil)
+  it 'returns the default path when PuppetX::Chocolatey::ChocolateyInstall.install_path is nil' do
+    expect(PuppetX::Chocolatey::ChocolateyInstall).to receieve(:temp_dir).and_return(nil)
 
-    subject.value.must == ENV['TEMP']
+    expect(fact_value).to eq(ENV['TEMP'])
   end
 
-
-  after :each do
+  after(:each) do
     Facter.clear
     Facter.clear_messages
   end

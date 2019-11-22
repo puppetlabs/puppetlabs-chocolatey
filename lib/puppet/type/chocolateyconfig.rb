@@ -2,17 +2,18 @@ require 'puppet/type'
 require 'pathname'
 
 Puppet::Type.newtype(:chocolateyconfig) do
-
-  @doc = <<-'EOT'
+  @doc = <<-DOC
     Allows managing config settings for Chocolatey.
     Configuration values provide settings for users
     to configure aspects of Chocolatey and the way it
     functions. Similar to features, except allow for user
     configured values. Requires 0.9.10+. Learn more about
     config at https://chocolatey.org/docs/commands-config
-  EOT
+  DOC
 
   ensurable do
+    desc 'Specifies state of resource'
+
     newvalue(:present)  { provider.create }
     newvalue(:absent)   { provider.destroy }
     defaultto :present
@@ -20,7 +21,6 @@ Puppet::Type.newtype(:chocolateyconfig) do
     def retrieve
       provider.properties[:ensure]
     end
-
   end
 
   newparam(:name) do
@@ -30,8 +30,8 @@ Puppet::Type.newtype(:chocolateyconfig) do
       will be encrypted in the configuration file."
 
     validate do |value|
-      if value.nil? or value.empty?
-        raise ArgumentError, "A non-empty name must be specified."
+      if value.nil? || value.empty?
+        raise ArgumentError, 'A non-empty name must be specified.'
       end
     end
 
@@ -42,7 +42,7 @@ Puppet::Type.newtype(:chocolateyconfig) do
     end
 
     def insync?(is)
-      is.downcase == should.downcase
+      is.casecmp(should.downcase).zero?
     end
   end
 
@@ -53,18 +53,18 @@ Puppet::Type.newtype(:chocolateyconfig) do
       configuration file."
 
     validate do |value|
-      if value.nil? or value.empty?
-        raise ArgumentError, "A non-empty value must be specified. To unset value, use ensure => absent"
+      if value.nil? || value.empty?
+        raise ArgumentError, 'A non-empty value must be specified. To unset value, use ensure => absent'
       end
     end
 
     def insync?(is)
-      if (resource[:name] =~ /password/i)
+      if resource[:name] =~ %r{password}i
         # If name contains password, it is
         # always in sync if there is a value
-        return (is.nil? || is.empty?) == (should.nil? || should.empty?)
+        (is.nil? || is.empty?) == (should.nil? || should.empty?)
       else
-        return is.downcase == should.downcase
+        is.casecmp(should.downcase).zero?
       end
     end
   end
