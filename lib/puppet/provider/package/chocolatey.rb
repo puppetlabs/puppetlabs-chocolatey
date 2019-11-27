@@ -232,7 +232,7 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
   # the resource the method is called on.
   # Query provides the information for the single package identified by @Resource[:name].
   def query
-    if @resource[:name][%r{\A\S*}].casecmp(package.name.downcase) == @property_hash[:name]
+    if @resource[:name][%r{\A\S*}].downcase == @property_hash[:name]
       self.class.instances.each do |package|
         return package.properties if @resource[:name][%r{\A\S*}].casecmp(package.name.downcase).zero?
       end
