@@ -273,8 +273,8 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
           unless pkg_output.nil?
             pkg_output.split("\n").each { |pkg| list << pkg }
           end
-        rescue => e
-          raise Puppet::Error, "#{e.message}"
+        rescue Puppet::ExecutionFailure
+          return nil
         end
 
         execpipe(listcmd) do |process|
@@ -293,11 +293,11 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
               name1 = pkg.split('|')[0].downcase
               name2 = values[0].downcase
               version = Gem::Version.new(pkg.split('|')[1])
-              if (name2 == name1) and (Gem::Version.new(values[1]) < version)
+              if (name2 == name1) && (Gem::Version.new(values[1]) < version)
                 latest = version
               end
             end
-            packages << new({:name => values[0].downcase, :ensure => values[1], :latest => latest, :provider => self.name})
+            packages << new(name: values[0].downcase, ensure: values[1], latest: latest, provider: name)
           end
         end
       else
@@ -312,7 +312,7 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
                         line.split(' ')
                       end
             values[1] = :held if pins.include? values[0]
-            packages << new({:name => values[0].downcase, :ensure => values[1], :latest => '', :provider => self.name})
+            packages << new(name: values[0].downcase, ensure: values[1], latest: '', provider: name)
           end
         end
       end
