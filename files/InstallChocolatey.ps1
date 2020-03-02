@@ -12,6 +12,13 @@
 # CONDITIONS OF ANY KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations under the License.
 # ==============================================================================
+[CmdletBinding()]
+Param(
+  [string]$DownloadUrl = '',
+  [string]$UnzipType = '',
+  [string]$InstallProxy = '',
+  [string]$SevenZipExe = ''
+)
 
 $ErrorActionPreference = 'Stop'
 
@@ -20,11 +27,37 @@ $ErrorActionPreference = 'Stop'
 # https://tickets.puppetlabs.com/browse/MODULES-2634
 #try {
 
-# variables
-$url = '<%= @download_url %>'
-$unzipMethod = '<%= @unzip_type %>'
-$install_proxy = <%= @_install_proxy %>
-$7zaExe = '<%= @seven_zip_exe %>'
+# if a parameter is passed, used that (Bolt task),
+#  else fallback to environment variables (Puppet exec resource)
+if ($DownloadUrl) {
+  $url = $DownloadUrl
+} else {
+  $url = $env:ChocolateyDownloadUrl
+}
+
+if ($UnzipType) {
+  $unzipMethod = $UnzipType
+} else {
+  $unzipMethod = $env:ChocolateyUnzipType
+}
+
+if ($InstallProxy) {
+  $install_proxy = $InstallProxy
+} else {
+  $install_proxy = $env:ChocolateyInstallProxy
+}
+
+if ($SevenZipExe) {
+  $7zaExe = $SevenZipExe
+} else {
+  $7zaExe = $env:Chocolatey7ZipExe
+}
+
+Write-Output "url = $url"
+Write-Output "unzipMethod = $unzipMethod"
+Write-Output "install_proxy = $install_proxy"
+Write-Output "7zaExe = $7zaExe"
+
 if ($env:TEMP -eq $null) {
   $env:TEMP = Join-Path $env:SystemDrive 'temp'
 }
@@ -68,13 +101,13 @@ Fix-PowerShellOutputRedirectionBug
 # will typically produce a message for PowerShell v2 (just an info
 # message though)
 try {
-  # Set TLS 1.2 (3072), then TLS 1.1 (768), then TLS 1.0 (192), finally SSL 3.0 (48)
-  # Use integers because the enumeration values for TLS 1.2 and TLS 1.1 won't
-  # exist in .NET 4.0, even though they are addressable if .NET 4.5+ is
+  # Set TLS 1.2 (3072) as that is the minimum required by Chocolatey.org.
+  # Use integers because the enumeration value for TLS 1.2 won't exist
+  # in .NET 4.0, even though they are addressable if .NET 4.5+ is
   # installed (.NET 4.5 is an in-place upgrade).
-  [System.Net.ServicePointManager]::SecurityProtocol = 3072 -bor 768 -bor 192 -bor 48
+  [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
 } catch {
-  Write-Output "Unable to set PowerShell to use TLS 1.2 and TLS 1.1 due to old .NET Framework installed. If you see underlying connection closed or trust errors, you may need to do one or more of the following: (1) upgrade to .NET Framework 4.5 and PowerShell v3 and/or (2) specify internal Chocolatey package location (see https://forge.puppet.com/puppetlabs/chocolatey#manage-chocolatey-installation)."
+  Write-Output 'Unable to set PowerShell to use TLS 1.2. This is required for contacting Chocolatey as of 03 FEB 2020. https://chocolatey.org/blog/remove-support-for-old-tls-versions. If you see underlying connection closed or trust errors, you may need to do one or more of the following: (1) upgrade to .NET Framework 4.5+ and PowerShell v3+, (2) Call [System.Net.ServicePointManager]::SecurityProtocol = 3072; in PowerShell prior to attempting installation, (3) specify internal Chocolatey package location (set $env:chocolateyDownloadUrl prior to install or host the package internally), (4) use the Download + PowerShell method of install. See https://chocolatey.org/docs/installation for all install options.'
 }
 
 function Download-File {

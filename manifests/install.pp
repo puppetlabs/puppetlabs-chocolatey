@@ -4,11 +4,7 @@
 class chocolatey::install {
   assert_private()
 
-  $install_proxy = $::chocolatey::install_proxy
-  $_install_proxy = $install_proxy ? {
-    undef   => '$false',
-    default => "'${install_proxy}'",
-  }
+  $install_proxy           = $::chocolatey::install_proxy
   $_download_url           = $::chocolatey::chocolatey_download_url
   $seven_zip_download_url  = $::chocolatey::seven_zip_download_url
   $seven_zip_exe           = "${facts['choco_temp_dir']}\\7za.exe"
@@ -43,12 +39,18 @@ class chocolatey::install {
   }
 
   exec { 'install_chocolatey_official':
-    command     => template('chocolatey/InstallChocolatey.ps1.erb'),
+    command     => file('chocolatey/InstallChocolatey.ps1'),
     creates     => "${::chocolatey::choco_install_location}\\bin\\choco.exe",
     provider    => powershell,
     timeout     => $::chocolatey::choco_install_timeout_seconds,
     logoutput   => $::chocolatey::log_output,
-    environment => ["ChocolateyInstall=${::chocolatey::choco_install_location}"],
+    environment => [
+      "ChocolateyInstall=${::chocolatey::choco_install_location}",
+      "ChocolateyDownloadUrl=${download_url}",
+      "ChocolateyUnzipType=${unzip_type}",
+      "ChocolateyInstallProxy=${install_proxy}",
+      "Chocolatey7ZipExe=${seven_zip_exe}",
+    ],
     require     => Registry_value['ChocolateyInstall environment value'],
   }
 }

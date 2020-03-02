@@ -1,0 +1,29 @@
+{
+  "description": "Installs Chocolatey on a set of targets.",
+  "implementations": [
+    {
+      "name": "install.ps1",
+      "requirements": ["powershell"],
+      "files": ["chocolatey/files/InstallChocolatey.ps1"]
+    }
+  ],
+  "parameters": {
+    "download_url": {
+      "description": "A url that will return `chocolatey.nupkg`. This must be a url, but not necessarily an OData feed. Any old url location will work. Defaults to `'https://chocolatey.org/api/v2/package/chocolatey/'`.",
+      "type": "Optional[String[1]]"
+    },
+    "use_7zip": {
+      "description": "Whether to use built-in shell or allow installer to download 7zip to extract `chocolatey.nupkg` during installation. Defaults to `false`",
+      "type": "Optional[Boolean]"
+    },
+    "install_proxy": {
+      "description": "Proxy server to use to use for installation of chocolatey itself or `undef` to not use a proxy",
+      "type": "Optional[String[1]]"
+    },
+    "seven_zip_exe": {
+      "description": "Path on the windows host where the 7zip binary (7za.exe) is installed. Defaults to `'C:/Windows/Temp/7za.exe'`.",
+      "type": "Optional[String[1]]"
+    }
+  }
+}
+

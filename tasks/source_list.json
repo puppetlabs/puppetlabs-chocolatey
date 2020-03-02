@@ -1,0 +1,11 @@
+{
+  "description": "List the Chocolatey sources on a set of targets.",
+  "implementations": [
+    {
+      "name": "source.ps1",
+      "requirements": ["powershell"]
+    }
+  ],
+  "parameters": {}
+}
+
