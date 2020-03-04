@@ -21,6 +21,16 @@ _Private Classes_
 * [`chocolateyfeature`](#chocolateyfeature): Allows managing features for Chocolatey. Features are configuration that act as feature flippers to turn on or off certain aspects of how Cho
 * [`chocolateysource`](#chocolateysource): Allows managing sources for Chocolatey. A source can be a folder, a CIFS share, a NuGet Http OData feed, or a full Package Gallery. Learn mor
 
+**Tasks**
+
+* [`install`](#install): Installs Chocolatey on a set of targets.
+* [`source`](#source): Allows modifying sources for Chocolatey. A source can be a folder, a CIFS share, a NuGet Http OData feed, or a full Package Gallery. Learn mo
+* [`source_add`](#source_add): Allows modifying sources for Chocolatey. A source can be a folder, a CIFS share, a NuGet Http OData feed, or a full Package Gallery. Learn mo
+* [`source_disable`](#source_disable): Disables a Chocolatey source on a set of targets.
+* [`source_enable`](#source_enable): Enables a Chocolatey source on a set of targets.
+* [`source_list`](#source_list): List the Chocolatey sources on a set of targets.
+* [`source_remove`](#source_remove): Removes a Chocolatey source on a set of targets.
+
 ## Classes
 
 ### chocolatey
@@ -361,4 +371,204 @@ same as setting the value to nil or not specifying
 the property at all.
 
 Default value: ''
+
+## Tasks
+
+### install
+
+Installs Chocolatey on a set of targets.
+
+**Supports noop?** false
+
+#### Parameters
+
+##### `download_url`
+
+Data type: `Optional[String[1]]`
+
+A url that will return `chocolatey.nupkg`. This must be a url, but not necessarily an OData feed. Any old url location will work. Defaults to `'https://chocolatey.org/api/v2/package/chocolatey/'`.
+
+##### `use_7zip`
+
+Data type: `Optional[Boolean]`
+
+Whether to use built-in shell or allow installer to download 7zip to extract `chocolatey.nupkg` during installation. Defaults to `false`
+
+##### `install_proxy`
+
+Data type: `Optional[String[1]]`
+
+Proxy server to use to use for installation of chocolatey itself or `undef` to not use a proxy
+
+##### `seven_zip_exe`
+
+Data type: `Optional[String[1]]`
+
+Path on the windows host where the 7zip binary (7za.exe) is installed. Defaults to `'C:/Windows/Temp/7za.exe'`.
+
+### source
+
+Allows modifying sources for Chocolatey. A source can be a folder, a CIFS share, a NuGet Http OData feed, or a full Package Gallery. Learn more about sources at https://chocolatey.org/docs/how-to-host-feed
+
+**Supports noop?** false
+
+#### Parameters
+
+##### `command`
+
+Data type: `Enum['add', 'remove', 'enable', 'disable', 'list']`
+
+What action should be taken on the source. 'add' will add a new source to Chocolatey. 'remove' will remove an existing source from Chocolatey. 'disable' will disable an existing source in Chocolatey. 'list' will list all current Chocolatey sources.
+
+##### `name`
+
+Data type: `Optional[String[1]]`
+
+The name of the source. Used for uniqueness. Optional if "command = 'list'".
+
+##### `location`
+
+Data type: `Optional[String[1]]`
+
+The location of the source repository. Can be a url pointing to an OData feed (like chocolatey/chocolatey_server), a CIFS (UNC) share, or a local folder. Required when "command = 'add'".
+
+##### `user`
+
+Data type: `Optional[String[1]]`
+
+Optional user name for authenticated feeds. Requires at least Chocolatey v0.9.9.0. Defaults to 'undef'. Specifying an empty value is the same as setting the value to 'undef' or not specifying the property at all.
+
+##### `password`
+
+Data type: `Optional[String[1]]`
+
+Optional user password for authenticated feeds.
+
+##### `priority`
+
+Data type: `Optional[Integer]`
+
+Optional priority for explicit feed order when searching for packages across multiple feeds. The lower the number the higher the priority. Sources with a 0 priority are considered no priority and are added after other sources with a priority number. Requires at least Chocolatey v0.9.9.9. Defaults to 0.
+
+##### `bypass_proxy`
+
+Data type: `Optional[Boolean]`
+
+Option to specify whether this source should explicitly bypass any explicitly or system configured proxies. Requires at least Chocolatey v0.10.4. Defaults to false.
+
+##### `admin_only`
+
+Data type: `Optional[Boolean]`
+
+Option to specify whether this source should visible to Windows user accounts in the Administrators group only. Requires Chocolatey for Business (C4B) v1.12.2+ and at least Chocolatey v0.10.8 for the setting to be respected. Defaults to false.
+
+##### `allow_self_service`
+
+Data type: `Optional[Boolean]`
+
+Option to specify whether this source should be allowed to be used with Chocolatey Self Service. Requires Chocolatey for Business (C4B) v1.10.0+ with the feature useBackgroundServiceWithSelfServiceSourcesOnly turned on in order to be respected. Also requires at least Chocolatey v0.10.4 for the setting to be enabled. Defaults to false.
+
+### source_add
+
+Allows modifying sources for Chocolatey. A source can be a folder, a CIFS share, a NuGet Http OData feed, or a full Package Gallery. Learn more about sources at https://chocolatey.org/docs/how-to-host-feed
+
+**Supports noop?** false
+
+#### Parameters
+
+##### `name`
+
+Data type: `String[1]`
+
+The name of the source. Used for uniqueness
+
+##### `location`
+
+Data type: `String[1]`
+
+The location of the source repository. Can be a url pointing to an OData feed (like chocolatey/chocolatey_server), a CIFS (UNC) share, or a local folder.
+
+##### `user`
+
+Data type: `Optional[String[1]]`
+
+Optional user name for authenticated feeds. Requires at least Chocolatey v0.9.9.0. Defaults to 'undef'. Specifying an empty value is the same as setting the value to 'undef' or not specifying the property at all.
+
+##### `password`
+
+Data type: `Optional[String[1]]`
+
+Optional user password for authenticated feeds.
+
+##### `priority`
+
+Data type: `Optional[Integer]`
+
+Optional priority for explicit feed order when searching for packages across multiple feeds. The lower the number the higher the priority. Sources with a 0 priority are considered no priority and are added after other sources with a priority number. Requires at least Chocolatey v0.9.9.9. Defaults to 0.
+
+##### `bypass_proxy`
+
+Data type: `Optional[Boolean]`
+
+Option to specify whether this source should explicitly bypass any explicitly or system configured proxies. Requires at least Chocolatey v0.10.4. Defaults to false.
+
+##### `admin_only`
+
+Data type: `Optional[Boolean]`
+
+Option to specify whether this source should visible to Windows user accounts in the Administrators group only. Requires Chocolatey for Business (C4B) v1.12.2+ and at least Chocolatey v0.10.8 for the setting to be respected. Defaults to false.
+
+##### `allow_self_service`
+
+Data type: `Optional[Boolean]`
+
+Option to specify whether this source should be allowed to be used with Chocolatey Self Service. Requires Chocolatey for Business (C4B) v1.10.0+ with the feature useBackgroundServiceWithSelfServiceSourcesOnly turned on in order to be respected. Also requires at least Chocolatey v0.10.4 for the setting to be enabled. Defaults to false.
+
+### source_disable
+
+Disables a Chocolatey source on a set of targets.
+
+**Supports noop?** false
+
+#### Parameters
+
+##### `name`
+
+Data type: `String[1]`
+
+The name of the source. Used for uniqueness
+
+### source_enable
+
+Enables a Chocolatey source on a set of targets.
+
+**Supports noop?** false
+
+#### Parameters
+
+##### `name`
+
+Data type: `String[1]`
+
+The name of the source. Used for uniqueness
+
+### source_list
+
+List the Chocolatey sources on a set of targets.
+
+**Supports noop?** false
+
+### source_remove
+
+Removes a Chocolatey source on a set of targets.
+
+**Supports noop?** false
+
+#### Parameters
+
+##### `name`
+
+Data type: `String[1]`
+
+The name of the source. Used for uniqueness
 

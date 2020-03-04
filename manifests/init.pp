@@ -34,7 +34,7 @@
 #     enable_autouninstaller => false,
 #   }
 #
-# @param [String] choco_install_location Where Chocolatey install should be
+# @param [Stdlib::Windowspath] choco_install_location Where Chocolatey install should be
 #   located. This needs to be an absolute path starting with a drive letter
 #   e.g. `c:\`. Defaults to the currently detected install location based on
 #   the `ChocolateyInstall` environment variable, falls back to
@@ -53,7 +53,7 @@
 #   be allowed for the install of Chocolatey (including .NET Framework 4 if
 #   necessary). Defaults to `1500` (25 minutes).
 #
-# @param [String] chocolatey_download_url A url that will return
+# @param [Stdlib::Filesource] chocolatey_download_url A url that will return
 #   `chocolatey.nupkg`. This must be a url, but not necessarily an OData feed.
 #   Any old url location will work. Defaults to
 #   `'https://chocolatey.org/api/v2/package/chocolatey/'`.

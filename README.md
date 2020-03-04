@@ -530,6 +530,65 @@ might want to do this in a default:
   * When Chocolatey is version `0.10.4` or later and "Verbose" is not specified as `true` Chocolatey will be run with the `--no-progress` parameter, limiting the erroneous output of download information to the logs.
 * "log_output" causes the output of chocolatey upgrades and installs to be
   shown.
+  
+### Bolt Tasks
+
+This module contains several Bolt tasks that allow for ad-hoc actions to be performed.
+
+#### Installing Chocolatey with Bolt
+
+You can install Chocolatey with Bolt by running the `chocolatey::install` task.
+This task takes parameters similar to the `chocolatey` Puppet manifest:
+
+``` bash
+bolt task run chocolatey::install --targets myhosts
+```
+
+#### Use an internal chocolatey.nupkg for Chocolatey installation with Bolt
+
+``` bash
+bolt task run chocolatey::install --targets myhosts download_url=https://internal.tld/chocolatey.nupkg
+```
+
+#### Adding a new source with Bolt
+
+Tasks are also available to manipulate Chocolatey sources. To add a new source:
+
+``` bash
+bolt task run chocolatey::source_add --targets myhsots name=internal location=https://internal.tld/chocolatey
+```
+
+#### Removing a source with Bolt
+
+To remove an existing source:
+
+``` bash
+bolt task run chocolatey::source_remove --targets myhsots name=myexistingsource
+```
+
+#### Disabling a source with Bolt
+
+You can also disable a source in Bolt (the following disables the default community source):
+
+``` bash
+bolt task run chocolatey::source_disable --targets myhsots name=chocolatey
+```
+
+#### Enabling a source with Bolt
+
+To enable a source:
+
+``` bash
+bolt task run chocolatey::source_enable --targets myhsots name=mysource
+```
+
+#### Listing all sources with Bolt
+
+To get a list of all configured sources:
+
+``` bash
+bolt task run chocolatey::source_list --targets myhsots
+```
 
 ## Reference
 
