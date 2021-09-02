@@ -84,7 +84,6 @@ chocolatey|19.0
   EOT
   end
 
-
   before :each do
     resource.provider = provider
 
@@ -317,7 +316,7 @@ chocolatey|19.0
 
       it 'finds highest available version within range' do
         resource[:ensure] = '>18.1 <19'
-        allow(provider).to receive(:execpipe).with([nil, "list", "chocolatey", "-a", "-r"]).and_yield(all_versions)
+        allow(provider).to receive(:execpipe).with([nil, 'list', 'chocolatey', '-a', '-r']).and_yield(all_versions)
         allow(provider).to receive(:latestcmd).and_return('chocolatey|18.1|19.0|false')
         expect(provider).to receive(:chocolatey).with('upgrade', 'chocolatey', '--version', '18.9', '-y', nil)
 
@@ -326,7 +325,7 @@ chocolatey|19.0
 
       it 'fails if no version matching version range can be found' do
         resource[:ensure] = '>8.1 <9'
-        allow(provider).to receive(:execpipe).with([nil, "list", "chocolatey", "-a", "-r"]).and_yield(all_versions)
+        allow(provider).to receive(:execpipe).with([nil, 'list', 'chocolatey', '-a', '-r']).and_yield(all_versions)
         allow(provider).to receive(:latestcmd).and_return('chocolatey|18.1|19.0|false')
         expect {
           provider.install
@@ -673,7 +672,6 @@ chocolatey|19.0
         resource[:ensure] = '>18.1 <19'
         expect(provider.insync?('17.5.1')).to be false
       end
-
     end
   end
 

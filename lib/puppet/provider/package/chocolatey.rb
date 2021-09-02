@@ -121,7 +121,6 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
     if should.is_a?(String)
       begin
         should_range = GEM_VERSION_RANGE.parse(should, GEM_VERSION)
-        
         unless should_range.is_a?(VersionRange::Eq)
           should = best_version(should_range)
           @resource[:ensure] = should
@@ -143,7 +142,7 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
               end
 
       # Add the package version
-      args << @resource[:name][%r{\A\S*}] << '--version' << should 
+      args << @resource[:name][%r{\A\S*}] << '--version' << should
     end
 
     if choco_exe
@@ -380,31 +379,23 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
     true
   end
 
-  def isVersion?(value)
-    begin
-      GEM_VERSION_RANGE.parse(value, GEM_VERSION)
-      return true
-    rescue
-      return false
-    end
+  def version_range?(value)
+    GEM_VERSION_RANGE.parse(value, GEM_VERSION)
+    true
+  rescue
+    false
   end
 
   def insync?(is)
     # this is called after the generic version matching logic (insync? for the
     # type), so we only get here if should != is
     return false unless is && is != :absent
-    #if 'should' is a range and 'is' a debian version we should check if 'should' includes 'is'
+    # if 'should' is a range and 'is' a gem version we should check if 'should' includes 'is'
     should = @resource[:ensure]
     return false unless is.is_a?(String) && should.is_a?(String)
-    if isVersion?(should)
-      begin
-        should_range = GEM_VERSION_RANGE.parse(should, GEM_VERSION)
-      rescue VersionRange::ValidationFailure, DebianVersion::ValidationFailure
-        Puppet.debug("Cannot parse #{should} as a debian version range")
-        return false
-      end
-      should_range.include?(GEM_VERSION.parse(is))
-    end
+    return false unless version_range?(should)
+    should_range = GEM_VERSION_RANGE.parse(should, GEM_VERSION)
+    should_range.include?(GEM_VERSION.parse(is))
   end
 
   def all_versions_cmd
@@ -412,9 +403,9 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
     args = [
       'list',
       @resource[:name][%r{\A\S*}],
-      '-a'
+      '-a',
     ]
-    
+
     args << '-r' if choco_exe
     if @resource[:source]
       args << '--source' << @resource[:source]
@@ -423,29 +414,25 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
   end
 
   def best_version(should_range)
+    # Get all available versions from chocolatey which are matching the defined version range and return the highest.
     available_versions = SortedSet.new
-    begin
-      execpipe(all_versions_cmd) do |process|
-        process.each_line do |line|
-          line.chomp!
-          next if line.empty?
-          if compiled_choco?
-            values = line.split('|')
-            package_ver = GEM_VERSION.parse(values[1])
-            available_versions << package_ver if should_range.include?(package_ver)
-          else
-            # Example: ( latest        : 2013.08.19.155043 )
-            values = line.split(':').map(&:strip).delete_if(&:empty?)
-            package_ver = values[1]
-          end
+    execpipe(all_versions_cmd) do |process|
+      process.each_line do |line|
+        line.chomp!
+        next if line.empty?
+        if compiled_choco?
+          values = line.split('|')
+          package_ver = GEM_VERSION.parse(values[1])
+        else
+          # Example: ( latest        : 2013.08.19.155043 )
+          values = line.split(':').map(&:strip).delete_if(&:empty?)
+          package_ver = values[1]
         end
+        available_versions << package_ver if should_range.include?(package_ver)
       end
-    rescue Puppet::ExecutionFailure
-      return nil
     end
 
     raise Puppet::Error, 'No available version found that match given version range.' if available_versions.empty?
-    
-    return available_versions.to_a.last.to_s
+    available_versions.to_a.last.to_s
   end
 end
