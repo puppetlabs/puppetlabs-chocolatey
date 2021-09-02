@@ -664,12 +664,12 @@ chocolatey|19.0
         allow(PuppetX::Chocolatey::ChocolateyVersion).to receive(:version).and_return(first_compiled_choco_version)
       end
 
-      it 'is in sync when existing version is within range' do
+      it 'is in sync when existing version is within version range' do
         resource[:ensure] = '>18.1 <19'
         expect(provider.insync?('18.5.1')).to be true
       end
 
-      it 'is in sync when existing version is within range' do
+      it 'is not in sync when existing version is outside of version range' do
         resource[:ensure] = '>18.1 <19'
         expect(provider.insync?('17.5.1')).to be false
       end
