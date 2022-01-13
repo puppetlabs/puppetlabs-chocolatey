@@ -1,8 +1,9 @@
 # @summary Sets up default parameters
 #
 # @api private
-
 class chocolatey::params {
+  assert_private()
+
   $install_location         = empty($facts['choco_install_path']) ? {
     false   => $facts['choco_install_path'],
     default => 'C:\ProgramData\chocolatey',
