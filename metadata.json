@@ -40,6 +40,12 @@
         "2019",
         "2022"
       ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "9"
+      ]
     }
   ],
   "requirements": [
