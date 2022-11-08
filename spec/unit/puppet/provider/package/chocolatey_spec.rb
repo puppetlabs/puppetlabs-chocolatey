@@ -76,11 +76,11 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
   let(:provider) { subject.class.new(resource) }
   let(:all_versions) do
     <<-'EOT'
-chocolatey|18.1
-chocolatey|18.2
-chocolatey|18.3
-chocolatey|18.9
-chocolatey|19.0
+zoom|5.12.6.10137
+zoom|5.12.3.9638
+zoom|5.12.2.9281
+zoom|5.11.9.8040
+zoom|5.8.0.1324
   EOT
   end
 
