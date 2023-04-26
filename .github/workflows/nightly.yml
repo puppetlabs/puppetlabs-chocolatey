@@ -47,6 +47,10 @@ jobs:
       fail-fast: false
       matrix: ${{fromJson(needs.setup_matrix.outputs.spec_matrix)}}
 
+    env:
+      PUPPET_GEM_VERSION: ${{ matrix.puppet_version }}
+      FACTER_GEM_VERSION: 'https://github.com/puppetlabs/facter#main'
+
     steps:
 
       - name: Checkout Source
