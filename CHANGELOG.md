@@ -5,12 +5,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v8.1.0](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/v8.1.0) - 2023-06-20
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/v8.0.0...v8.1.0)
+
 ## [v8.0.0](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/v8.0.0) - 2023-05-31
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/v7.0.1...v8.0.0)
 
 ### Added
 
+- pdksync - (MAINT) - Allow Stdlib 9.x [#326](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/326) ([LukasAud](https://github.com/LukasAud))
 - (CONT-596) - Updating readme with deferred function for sensitive fields [#325](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/325) ([Ramesh7](https://github.com/Ramesh7))
 
 ### Changed
