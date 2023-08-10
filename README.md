@@ -1,7 +1,5 @@
 # chocolatey
 
-[![Build Status](https://api.travis-ci.org/puppetlabs/puppetlabs-chocolatey.png?branch=)](https://travis-ci.org/puppetlabs/puppetlabs-chocolatey) [![Build status](https://ci.appveyor.com/api/projects/status/uosorvcyhnayv70m/branch/main?svg=true)](https://ci.appveyor.com/project/puppetlabs/puppetlabs-chocolatey/branch/main)
-
 ### Chocolatey for Business Now Available!
 
 We're excited for you to learn more about what's available in the [Business editions](https://chocolatey.org/compare)!
