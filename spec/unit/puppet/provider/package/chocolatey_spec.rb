@@ -194,7 +194,7 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
     end
 
     it 'returns nil source when element is nil' do
-      expect(provider.get_choco_feature(nil)).to be == {}
+      expect(provider.get_choco_feature(nil)).to eq({})
     end
 
     it 'converts an element to a source' do
