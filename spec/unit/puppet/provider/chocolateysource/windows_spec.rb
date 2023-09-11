@@ -250,7 +250,7 @@ describe provider do
     end
 
     it 'returns nil source when element it nil' do
-      expect(provider_class.get_source(nil)).to be == {}
+      expect(provider_class.get_source(nil)).to eq({})
     end
 
     it 'converts an element to a source' do

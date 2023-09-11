@@ -121,7 +121,7 @@ RSpec/ExpectInHook:
 # Offense count: 1
 # Configuration parameters: Include, CustomTransform, IgnoreMethods, SpecSuffixOnly.
 # Include: **/*_spec*rb*, **/spec/**/*
-RSpec/FilePath:
+RSpec/SpecFilePathSuffix:
   Exclude:
     - 'spec/unit/facter/choco_temp_dir.rb'
 

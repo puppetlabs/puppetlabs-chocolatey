@@ -21,7 +21,7 @@ describe 'choco_temp_dir fact' do
   end
 
   it 'returns the TEMP directory' do
-    expect(PuppetX::Chocolatey::ChocolateyInstall).to receive(:temp_dir).and_return('waffles')
+    allow(PuppetX::Chocolatey::ChocolateyInstall).to receive(:temp_dir).and_return('waffles')
 
     expect(fact_value).to eq('waffles')
   end
