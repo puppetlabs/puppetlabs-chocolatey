@@ -8,7 +8,7 @@ require_relative '../../ruby_task_helper/files/task_helper'
 
 # Manage installing, upgrading and uninstalling packages
 class ChocolateyTask < TaskHelper
-  def task(action: nil, package: nil, version: nil, **args)
+  def task(action: nil, package: nil, version: nil, **_args)
     command = [
       'choco',
       action,
