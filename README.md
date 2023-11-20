@@ -19,7 +19,8 @@ We're excited for you to learn more about what's available in the [Business edit
 6. [Limitations - OS compatibility, etc.](#limitations)
     * [Known Issues](#known-issues)
 7. [Development - Guide for contributing to the module](#development)
-8. [Attributions](#attributions)
+8. [License](#license)
+9. [Attributions](#attributions)
 
 ## Overview
 
@@ -595,6 +596,10 @@ For information on classes and types, see [REFERENCE.md](https://github.com/pupp
 * This module may have issues upgrading Chocolatey itself using the package resource.
 * If .NET 4.0 is not installed, it may have trouble installing Chocolatey. Chocolatey version 0.9.9.9+ helps alleviate this issue.
 * If there is an error in the installer (`InstallChocolatey.ps1.erb`), it may not show as an error. This may be an issue with the PowerShell provider and is still under investigation.
+
+## License
+
+This codebase is licensed under the Apache2.0 licensing, however due to the nature of the codebase the open source dependencies may also use a combination of [AGPL](https://www.gnu.org/licenses/agpl-3.0.en.html), [BSD-2](https://opensource.org/license/bsd-2-claus), [BSD-3](https://opensource.org/license/bsd-3-claus), [GPL2.0](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html), [LGPL](https://opensource.org/license/lgpl-3-0/), [MIT](https://opensource.org/license/mit/) and [MPL](https://opensource.org/license/mpl-2-0/) Licensing.
 
 ## Development
 
