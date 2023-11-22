@@ -43,6 +43,11 @@ group :system_tests do
   gem "nokogiri",                 require: false, platforms: [:ruby, :mswin, :mingw, :x64_mingw]
 end
 
+group :release_prep do
+  gem 'puppet-strings', '~> 4.0',         require: false
+  gem "puppetlabs_spec_helper", '~> 5.0', require: false
+end
+
 puppet_version = ENV['PUPPET_GEM_VERSION']
 facter_version = ENV['FACTER_GEM_VERSION']
 hiera_version = ENV['HIERA_GEM_VERSION']
