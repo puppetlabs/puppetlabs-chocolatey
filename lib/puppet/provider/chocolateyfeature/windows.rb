@@ -60,6 +60,7 @@ Puppet::Type.type(:chocolateyfeature).provide(:windows) do
 
     feature[:ensure] = :disabled
     feature[:ensure] = :enabled if enabled
+    feature[:ensure] = :not_explicit if element.attributes['setExplicitly'].casecmp('false').zero?
 
     Puppet.debug("Loaded feature '#{feature.inspect}'.")
 
