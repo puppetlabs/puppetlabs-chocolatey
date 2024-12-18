@@ -5,16 +5,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v8.0.1](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/v8.0.1) - 2024-12-10
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/v8.0.0...v8.0.1)
+
 ## [v8.0.0](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/v8.0.0) - 2023-05-31
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/v7.0.1...v8.0.0)
 
+### Changed
+
+- (CONT-774) Puppet 8 support / Drop Puppet 6 [#316](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/316) ([LukasAud](https://github.com/LukasAud))
+
 ### Added
 
+- pdksync - (MAINT) - Allow Stdlib 9.x [#326](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/326) ([LukasAud](https://github.com/LukasAud))
 - (CONT-596) - Updating readme with deferred function for sensitive fields [#325](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/325) ([Ramesh7](https://github.com/Ramesh7))
-
-### Changed
-- (CONT-774) Puppet 8 support / Drop Puppet 6 [#316](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/316) ([LukasAud](https://github.com/LukasAud))
 
 ### Fixed
 
@@ -33,6 +39,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/v6.2.1...v7.0.0)
 
 ### Changed
+
 - (GH-297) Raise minimum puppet version required [#298](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/298) ([LukasAud](https://github.com/LukasAud))
 
 ## [v6.2.1](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/v6.2.1) - 2022-10-03
@@ -82,6 +89,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/v5.2.1...v6.0.0)
 
 ### Changed
+
 - pdksync - Remove Puppet 5 from testing and bump minimal version to 6.0.0 [#248](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/248) ([carabasdaniel](https://github.com/carabasdaniel))
 
 ### Fixed
@@ -142,6 +150,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/v4.1.0...v5.0.0)
 
 ### Changed
+
 - Use datatypes and facts hash. Remove logic for Puppet 3.x [#175](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/175) ([treydock](https://github.com/treydock))
 
 ### Fixed
@@ -160,14 +169,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/3.3.0...v4.0.0)
 
+### Changed
+
+- (MODULES-9310) Raise lower Puppet bound to 5.5.10 [#159](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/159) ([eimlav](https://github.com/eimlav))
+
 ### Added
 
 - (MODULES-9317) Add Puppet Strings docs [#162](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/162) ([eimlav](https://github.com/eimlav))
 - (FM-8194) Convert tests to litmus [#156](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/156) ([eimlav](https://github.com/eimlav))
 - (MODULES-9224) Add no progress flag [#154](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/154) ([michaeltlombardi](https://github.com/michaeltlombardi))
-
-### Changed
-- (MODULES-9310) Raise lower Puppet bound to 5.5.10 [#159](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/159) ([eimlav](https://github.com/eimlav))
 
 ## [3.3.0](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/3.3.0) - 2019-03-19
 
@@ -240,6 +250,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - (Modules-4508) Fixed error with version parameter [#69](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/69) ([derek-robinson](https://github.com/derek-robinson))
 
+### Other
+
+- (maint) bump release date [#61](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/61) ([eputnam](https://github.com/eputnam))
+
 ## [2.0.1](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/2.0.1) - 2017-01-03
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/2.0.0...2.0.1)
@@ -274,6 +288,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/1.2.6...0.8.0)
 
 ### Changed
+
 - (MODULES-3490) Sync from Community Repo [#28](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/28) ([ferventcoder](https://github.com/ferventcoder))
 
 ## [1.2.6](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/1.2.6) - 2016-07-11
