@@ -5,7 +5,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [v8.0.1](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/v8.0.1) - 2024-12-10
+## [v8.0.2](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/v8.0.2) - 2025-03-06
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/v8.0.1...v8.0.2)
+
+### Fixed
+
+- changed File.read on File.open, because read didn't correct open xml … [#369](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/369) ([andryua](https://github.com/andryua))
+
+## [v8.0.1](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/v8.0.1) - 2024-12-18
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/v8.0.0...v8.0.1)
 
