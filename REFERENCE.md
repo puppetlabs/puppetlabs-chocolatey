@@ -99,6 +99,10 @@ The following parameters are available in the `chocolatey` class:
 * [`log_output`](#-chocolatey--log_output)
 * [`chocolatey_version`](#-chocolatey--chocolatey_version)
 * [`install_proxy`](#-chocolatey--install_proxy)
+* [`install_ignore_proxy`](#-chocolatey--install_ignore_proxy)
+* [`install_proxy_user`](#-chocolatey--install_proxy_user)
+* [`install_proxy_password`](#-chocolatey--install_proxy_password)
+* [`install_tempdir`](#-chocolatey--install_tempdir)
 
 ##### <a name="-chocolatey--choco_install_location"></a>`choco_install_location`
 
@@ -127,11 +131,9 @@ Default value: `false`
 Data type: `String[1]`
 
 Specifies the source file for 7za.exe.
-Supports all sources supported by Puppet's file resource. You should use
-a 32bit binary for compatibility.
-Defaults to 'https://chocolatey.org/7za.exe'.
+Defaults to 'https://community.chocolatey.org/7za.exe'.
 
-Default value: `'https://chocolatey.org/7za.exe'`
+Default value: `'https://community.chocolatey.org/7za.exe'`
 
 ##### <a name="-chocolatey--choco_install_timeout_seconds"></a>`choco_install_timeout_seconds`
 
@@ -150,9 +152,9 @@ Data type: `Stdlib::Filesource`
 A url that will return
 `chocolatey.nupkg`. This must be a url, but not necessarily an OData feed.
 Any old url location will work. Defaults to
-`'https://chocolatey.org/api/v2/package/chocolatey/'`.
+`'https://community.chocolatey.org/api/v2/package/chocolatey/'`.
 
-Default value: `'https://chocolatey.org/api/v2/package/chocolatey/'`
+Default value: `'https://community.chocolatey.org/api/v2/package/chocolatey/'`
 
 ##### <a name="-chocolatey--enable_autouninstaller"></a>`enable_autouninstaller`
 
@@ -191,6 +193,39 @@ Data type: `Optional[String[1]]`
 
 Proxy server to use to use for installation of chocolatey itself or
 `undef` to not use a proxy
+
+Default value: `undef`
+
+##### <a name="-chocolatey--install_ignore_proxy"></a>`install_ignore_proxy`
+
+Data type: `Optional[Boolean]`
+
+If set to 'true' the installation script will ignore
+the configured 'install_proxy'
+
+Default value: `undef`
+
+##### <a name="-chocolatey--install_proxy_user"></a>`install_proxy_user`
+
+Data type: `Optional[String[1]]`
+
+The username to use when using a proxy that requires authentication.
+
+Default value: `undef`
+
+##### <a name="-chocolatey--install_proxy_password"></a>`install_proxy_password`
+
+Data type: `Optional[Sensitive]`
+
+The password to use when using a proxy that requires authentication.
+
+Default value: `undef`
+
+##### <a name="-chocolatey--install_tempdir"></a>`install_tempdir`
+
+Data type: `Optional[Stdlib::Windowspath]`
+
+The temporary directory Chocolatey extracts to when installing.
 
 Default value: `undef`
 
