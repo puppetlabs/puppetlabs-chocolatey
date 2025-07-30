@@ -146,7 +146,7 @@ describe Puppet::Type.type(:chocolateyconfig).provider(:windows) do
       before(:each) do
         allow(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_config_file).and_return(choco_config)
         allow(PuppetX::Chocolatey::ChocolateyCommon).to receive(:file_exists?).with(choco_config).and_return(true)
-        allow(File).to receive(:read).with(choco_config).and_return(choco_config_contents)
+        allow(File).to receive(:open).with(choco_config).and_return(StringIO.new(choco_config_contents))
       end
 
       it 'matches the count of configs in the config' do
@@ -248,7 +248,7 @@ describe Puppet::Type.type(:chocolateyconfig).provider(:windows) do
       allow(PuppetX::Chocolatey::ChocolateyCommon).to receive(:set_env_chocolateyinstall).at_most(:once)
       allow(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_config_file).and_return(choco_config).at_most(:once)
       allow(PuppetX::Chocolatey::ChocolateyCommon).to receive(:file_exists?).with(choco_config).and_return(true).at_most(:once)
-      allow(File).to receive(:read).with(choco_config).and_return(choco_config_contents).at_most(:once)
+      allow(File).to receive(:open).with(choco_config).and_return(StringIO.new(choco_config_contents)).at_most(:once)
 
       resource[:name] = resource_name
       resource[:value] = resource_value
