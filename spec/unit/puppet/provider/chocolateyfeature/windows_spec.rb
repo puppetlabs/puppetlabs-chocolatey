@@ -134,7 +134,7 @@ describe provider do
       before :each do
         allow(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_config_file).and_return(choco_config)
         allow(PuppetX::Chocolatey::ChocolateyCommon).to receive(:file_exists?).with(choco_config).and_return(true)
-        allow(File).to receive(:read).with(choco_config).and_return(choco_config_contents)
+        allow(File).to receive(:open).with(choco_config).and_return(StringIO.new(choco_config_contents))
 
         features = provider_class.read_choco_features
       end

@@ -160,7 +160,7 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:set_env_chocolateyinstall)
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_config_file).and_return(choco_config)
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:file_exists?).with(choco_config).and_return(true)
-        expect(File).to receive(:read).with(choco_config).and_return choco_config_contents
+        expect(File).to receive(:open).with(choco_config).and_return StringIO.new(choco_config_contents)
 
         choco_features = provider.read_choco_features
         expect(choco_features.count).to eq 14
@@ -170,7 +170,7 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:set_env_chocolateyinstall)
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_config_file).and_return(choco_config)
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:file_exists?).with(choco_config).and_return(true)
-        expect(File).to receive(:read).with(choco_config).and_return choco_config_contents
+        expect(File).to receive(:open).with(choco_config).and_return StringIO.new(choco_config_contents)
 
         choco_features = provider.read_choco_features
         expect(choco_features[0]).to be_an_instance_of REXML::Element
@@ -212,7 +212,7 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
       expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:set_env_chocolateyinstall)
       expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_config_file).and_return(choco_config)
       expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:file_exists?).with(choco_config).and_return(true)
-      expect(File).to receive(:read).with(choco_config).and_return choco_config_contents
+      expect(File).to receive(:open).with(choco_config).and_return StringIO.new(choco_config_contents)
       expect(provider.choco_features.count).to eq 14
       provider.choco_features[0].is_a?(Hash)
     end
@@ -240,7 +240,7 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:set_env_chocolateyinstall).twice
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_config_file).and_return(choco_config)
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:file_exists?).with(choco_config).and_return(true)
-        expect(File).to receive(:read).with(choco_config).and_return choco_config_contents
+        expect(File).to receive(:open).with(choco_config).and_return StringIO.new(choco_config_contents)
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_version).and_return(minimum_supported_choco_exit_codes).at_least(:once)
         resource[:ensure] = :present
         expect(provider).to receive(:chocolatey).with('install', 'chocolatey', '-y', nil, '--ignore-package-exit-codes')
@@ -252,7 +252,7 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:set_env_chocolateyinstall).twice
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_config_file).and_return(choco_config)
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:file_exists?).with(choco_config).and_return(true)
-        expect(File).to receive(:read).with(choco_config).and_return choco_config_contents
+        expect(File).to receive(:open).with(choco_config).and_return StringIO.new(choco_config_contents)
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_version).and_return(choco_zero_ten_zero).at_least(:once)
         resource[:ensure] = :present
         expect(provider).to receive(:chocolatey).with('install', 'chocolatey', '-y', nil, '--ignore-package-exit-codes')
@@ -264,7 +264,7 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:set_env_chocolateyinstall).twice
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_config_file).and_return(choco_config)
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:file_exists?).with(choco_config).and_return(true)
-        expect(File).to receive(:read).with(choco_config).and_return choco_config_contents_upec
+        expect(File).to receive(:open).with(choco_config).and_return choco_config_contents_upec
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_version).and_return(choco_zero_ten_zero).at_least(:once)
         resource[:ensure] = :present
         expect(provider).to receive(:chocolatey).with('install', 'chocolatey', '-y', nil)
@@ -276,7 +276,7 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:set_env_chocolateyinstall).twice
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_config_file).and_return(choco_config)
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:file_exists?).with(choco_config).and_return(true)
-        expect(File).to receive(:read).with(choco_config).and_return choco_config_contents
+        expect(File).to receive(:open).with(choco_config).and_return StringIO.new(choco_config_contents)
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_version).and_return(minimum_supported_choco_no_progress).at_least(:once)
         resource[:ensure] = :present
         expect(provider).to receive(:chocolatey).with('install', 'chocolatey', '-y', nil, '--ignore-package-exit-codes', '--no-progress')
@@ -288,7 +288,7 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:set_env_chocolateyinstall).twice
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_config_file).and_return(choco_config)
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:file_exists?).with(choco_config).and_return(true)
-        expect(File).to receive(:read).with(choco_config).and_return choco_config_contents
+        expect(File).to receive(:open).with(choco_config).and_return StringIO.new(choco_config_contents)
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_version).and_return(choco_zero_eleven_zero).at_least(:once)
         resource[:ensure] = :present
         expect(provider).to receive(:chocolatey).with('install', 'chocolatey', '-y', nil, '--ignore-package-exit-codes', '--no-progress')
@@ -300,7 +300,7 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:set_env_chocolateyinstall).twice
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_config_file).and_return(choco_config)
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:file_exists?).with(choco_config).and_return(true)
-        expect(File).to receive(:read).with(choco_config).and_return choco_config_contents
+        expect(File).to receive(:open).with(choco_config).and_return StringIO.new(choco_config_contents)
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_version).and_return(minimum_supported_choco_no_progress).at_least(:once)
         resource[:ensure] = :present
         resource[:package_settings] = { 'verbose' => true }
