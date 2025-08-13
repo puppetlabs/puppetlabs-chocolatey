@@ -539,6 +539,37 @@ package {'mysql':
 }
 ~~~
 
+You can also use `chocholatey::install_options()` to perform the neccessary
+escaping, and splitting, of arguments.
+
+~~~puppet
+package {'mysql':
+  ensure          => latest,
+  provider        => 'chocolatey',
+  install_options => chocolatey::install_options(
+    '-override',
+    '-installArgs',
+    '/INSTALLDIR="C:\Program Files\somewhere"',
+  ),
+}
+~~~
+
+The directory name itself can be escaped with `chocolatey::escape()`.
+
+~~~puppet
+$install_dir = 'C:\Program Files\somewhere'
+
+package {'mysql':
+  ensure          => latest,
+  provider        => 'chocolatey',
+  install_options => chocolatey::install_options(
+    '-override',
+    '-installArgs',
+    "/INSTALLDIR=$(chocolatey::escape($install_dir))",
+  ),
+}
+~~~
+
 **Note:** The above is for Chocolatey v0.9.9+. You may need to look for an
 alternative method to pass args if you have 0.9.8.x and below.
 
