@@ -44,7 +44,7 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
   commands chocolatey: PuppetX::Chocolatey::ChocolateyCommon.chocolatey_command
 
   def initialize(value = {})
-    super(value)
+    super
   end
 
   def print
@@ -176,7 +176,7 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
     args << '-fy' if choco_exe
 
     choco_version = Gem::Version.new(PuppetX::Chocolatey::ChocolateyCommon.choco_version)
-    if (!choco_exe || choco_version >= Gem::Version.new(PuppetX::Chocolatey::ChocolateyCommon::MINIMUM_SUPPORTED_CHOCO_UNINSTALL_SOURCE)) && (@resource[:source])
+    if (!choco_exe || choco_version >= Gem::Version.new(PuppetX::Chocolatey::ChocolateyCommon::MINIMUM_SUPPORTED_CHOCO_UNINSTALL_SOURCE)) && @resource[:source]
       args << '--source' << @resource[:source]
     end
 

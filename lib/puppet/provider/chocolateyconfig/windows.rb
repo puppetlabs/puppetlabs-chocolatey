@@ -18,7 +18,7 @@ Puppet::Type.type(:chocolateyconfig).provide(:windows) do
   commands chocolatey: PuppetX::Chocolatey::ChocolateyCommon.chocolatey_command
 
   def initialize(value = {})
-    super(value)
+    super
     @property_flush = {}
   end
 

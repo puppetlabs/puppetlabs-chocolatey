@@ -211,6 +211,6 @@ Puppet::Type.newtype(:chocolateysource) do
 
   def set_sensitive_parameters(sensitive_parameters)
     parameter(:password)&.sensitive = true
-    super(sensitive_parameters)
+    super
   end
 end
