@@ -13,6 +13,7 @@ module PuppetX
         value = nil
 
         if Puppet::Util::Platform.windows?
+          puts "(((((((((((((HELLO)))))))))))))"
           require 'win32/registry'
 
           begin
