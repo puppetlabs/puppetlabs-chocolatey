@@ -665,6 +665,52 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
         allow(provider).to receive(:execpipe).and_yield(StringIO.new("putty.install|0.83.0|false\n"))
         expect(provider.latest).to eq('0.83.0')
       end
+
+      it 'returns the latest version when warning lines precede the data line' do
+        allow(provider).to receive(:execpipe).and_yield(StringIO.new(
+                                                         "Unable to connect to source 'https://example.com/v3/index.json'\n" \
+                                                         "chocolatey|18.1|19.0|false\n",
+                                                       ))
+        expect(provider.latest).to eq('19.0')
+      end
+
+      it 'raises Puppet::Error when the output contains no parseable data line' do
+        allow(provider).to receive(:execpipe).and_yield(StringIO.new(
+                                                         "Unable to connect to source 'https://example.com/v3/index.json'\n",
+                                                       ))
+        expect { provider.latest }.to raise_error(
+          Puppet::Error, %r{Could not determine the latest version of chocolatey},
+        )
+      end
+
+      it 'raises Puppet::Error when execpipe yields no output' do
+        allow(provider).to receive(:execpipe).and_yield(StringIO.new(''))
+        expect { provider.latest }.to raise_error(
+          Puppet::Error, %r{Could not determine the latest version of chocolatey},
+        )
+      end
+
+      it 'raises Puppet::Error when the version field is not a valid version (e.g. "false")' do
+        # Defensive: even if a future choco version produces a malformed line
+        # where the `pinned` flag lands in the version slot, latest must not
+        # propagate "false" as a version.
+        allow(provider).to receive(:execpipe).and_yield(StringIO.new("chocolatey|18.1|false|false\n"))
+        expect { provider.latest }.to raise_error(
+          Puppet::Error, %r{Could not determine the latest version of chocolatey},
+        )
+      end
+
+      it 'ignores data lines for a different package' do
+        allow(provider).to receive(:execpipe).and_yield(StringIO.new("someotherpkg|1.0|2.0|false\n"))
+        expect { provider.latest }.to raise_error(
+          Puppet::Error, %r{Could not determine the latest version of chocolatey},
+        )
+      end
+
+      it 'returns nil when the choco command exits non-zero (preserves existing rescue)' do
+        allow(provider).to receive(:execpipe).and_raise(Puppet::ExecutionFailure.new('boom'))
+        expect(provider.latest).to be_nil
+      end
     end
 
     context 'with posh choco client' do
@@ -683,6 +729,18 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
         # expect(provider).to receive(:chocolatey).with('version', 'chocolatey', '--source', 'c:\packages', '| findstr /R "latest" | findstr /V "latestCompare"')
 
         # provider.latest
+      end
+
+      it 'returns the latest version from well-formed posh output' do
+        allow(provider).to receive(:execpipe).and_yield(StringIO.new("latest        : 2013.08.19.155043\n"))
+        expect(provider.latest).to eq('2013.08.19.155043')
+      end
+
+      it 'raises Puppet::Error when posh output has no latest line' do
+        allow(provider).to receive(:execpipe).and_yield(StringIO.new("Unable to connect to source 'https://example.com/'\n"))
+        expect { provider.latest }.to raise_error(
+          Puppet::Error, %r{Could not determine the latest version of chocolatey},
+        )
       end
     end
   end
