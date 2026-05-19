@@ -321,7 +321,10 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
 
           if compiled_choco?
             values = line.split('|')
-            package_ver = values[2]
+            # `choco upgrade --noop <pkg> -r` output:
+            #   name|current|pinned            -> no update available (3 fields)
+            #   name|current|available|pinned  -> update available (4 fields)
+            package_ver = (values.length >= 4) ? values[2] : values[1]
           else
             # Example: ( latest        : 2013.08.19.155043 )
             values = line.split(':').map(&:strip).delete_if(&:empty?)

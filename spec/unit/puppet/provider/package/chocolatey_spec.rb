@@ -655,6 +655,16 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
 
         # provider.latest
       end
+
+      it 'returns the available version when an update is available (4-field output)' do
+        allow(provider).to receive(:execpipe).and_yield(StringIO.new("treesizefree|4.6.3|4.8.1.1|false\n"))
+        expect(provider.latest).to eq('4.8.1.1')
+      end
+
+      it 'returns the current version when no update is available (3-field output)' do
+        allow(provider).to receive(:execpipe).and_yield(StringIO.new("putty.install|0.83.0|false\n"))
+        expect(provider.latest).to eq('0.83.0')
+      end
     end
 
     context 'with posh choco client' do
