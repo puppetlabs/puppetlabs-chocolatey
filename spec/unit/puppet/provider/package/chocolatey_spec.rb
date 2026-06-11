@@ -697,20 +697,55 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
   end
 
   context 'query' do
-    it 'returns a hash when chocolatey and the package are present' do
-      expect(provider_class).to receive(:instances).and_return [provider_class.new(ensure: '1.2.5',
-                                                                                   name: 'chocolatey',
-                                                                                   provider: :chocolatey)]
+    it 'returns the prefetch-populated property_hash when the package is present' do
+      prov = provider_class.new(ensure: '1.2.5',
+                                name: 'chocolatey',
+                                provider: :chocolatey)
 
-      expect(provider.query).to eq(ensure: '1.2.5',
-                                   name: 'chocolatey',
-                                   provider: :chocolatey)
+      expect(prov.query).to eq(ensure: '1.2.5',
+                               name: 'chocolatey',
+                               provider: :chocolatey)
     end
 
-    it 'returns nil when the package is missing' do
-      expect(provider_class).to receive(:instances).and_return []
-
+    it 'returns nil when the package is missing (empty property_hash)' do
       expect(provider.query).to be_nil
+    end
+
+    # MODULES-11769: query must read the cached property_hash, never re-invoke
+    # self.instances (and therefore `choco list`) during catalog evaluation.
+    it 'does not re-invoke instances' do
+      expect(provider_class).not_to receive(:instances)
+
+      provider.query
+    end
+  end
+
+  # MODULES-11769: the overridden prefetch must match catalog resources to
+  # instances case-insensitively, since self.instances downcases every name.
+  context 'self.prefetch' do
+    it 'matches a mixed-case resource title to a lower-cased instance' do
+      pkg = provider_class.new(ensure: '1.2.5', name: 'git', provider: :chocolatey)
+      allow(provider_class).to receive(:instances).and_return [pkg]
+
+      mixed_case = Puppet::Type.type(:package).new(provider: :chocolatey, name: 'Git')
+      provider_class.prefetch('Git' => mixed_case)
+
+      expect(mixed_case.provider).to eq(pkg)
+    end
+
+    it 'calls instances (choco list) exactly once' do
+      expect(provider_class).to receive(:instances).once.and_return([])
+
+      provider_class.prefetch('chocolatey' => resource)
+    end
+
+    it 'leaves unmatched resources without a prefetched property_hash' do
+      allow(provider_class).to receive(:instances).and_return []
+
+      absent = Puppet::Type.type(:package).new(provider: :chocolatey, name: 'not-installed')
+      provider_class.prefetch('not-installed' => absent)
+
+      expect(absent.provider.query).to be_nil
     end
   end
 
