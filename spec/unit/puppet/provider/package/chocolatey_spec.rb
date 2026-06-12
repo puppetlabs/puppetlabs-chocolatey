@@ -498,9 +498,15 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
   end
 
   context 'when updating' do
+    # MODULES-11769: update decides upgrade-vs-install from query, which now
+    # reads the prefetch-populated @property_hash rather than re-running
+    # `choco list`. A non-nil query means the package is present (upgrade); nil
+    # means absent (install). These specs stub query accordingly.
+    let(:present_package) { { ensure: '1.2.3', name: 'chocolatey', provider: :chocolatey } }
+
     context 'with compiled choco client' do
       before :each do
-        allow(provider).to receive_messages(on_hold?: false, use_package_exit_codes_feature_enabled?: false)
+        allow(provider).to receive_messages(on_hold?: false, use_package_exit_codes_feature_enabled?: false, query: present_package)
         allow(provider.class).to receive(:compiled_choco?).and_return(true)
         allow(PuppetX::Chocolatey::ChocolateyVersion).to receive(:version).and_return(first_compiled_choco_version)
         # unhold is called in installs on compiled choco
@@ -508,18 +514,12 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
       end
 
       it 'uses `chocolatey upgrade` when ensure latest and package present' do
-        allow(provider_class).to receive(:instances).and_return [provider_class.new(ensure: '1.2.3',
-                                                                                    name: 'chocolatey',
-                                                                                    provider: :chocolatey)]
         expect(provider).to receive(:chocolatey).with('upgrade', 'chocolatey', '-y', nil)
 
         provider.update
       end
 
       it 'calls with ignore package exit codes when = 0.9.10' do
-        allow(provider_class).to receive(:instances).and_return [provider_class.new(ensure: '1.2.3',
-                                                                                    name: 'chocolatey',
-                                                                                    provider: :chocolatey)]
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_version).and_return(minimum_supported_choco_exit_codes).at_least(:once)
         resource[:ensure] = :present
         expect(provider).to receive(:chocolatey).with('upgrade', 'chocolatey', '-y', nil, '--ignore-package-exit-codes')
@@ -528,9 +528,6 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
       end
 
       it 'calls with ignore package exit codes when > 0.9.10' do
-        allow(provider_class).to receive(:instances).and_return [provider_class.new(ensure: '1.2.3',
-                                                                                    name: 'chocolatey',
-                                                                                    provider: :chocolatey)]
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_version).and_return(choco_zero_ten_zero).at_least(:once)
         resource[:ensure] = :present
         expect(provider).to receive(:chocolatey).with('upgrade', 'chocolatey', '-y', nil, '--ignore-package-exit-codes')
@@ -539,9 +536,6 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
       end
 
       it 'calls with no-progress when = 0.10.4 and package_settings: verbose is not true' do
-        allow(provider_class).to receive(:instances).and_return [provider_class.new(ensure: '1.2.3',
-                                                                                    name: 'chocolatey',
-                                                                                    provider: :chocolatey)]
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_version).and_return(minimum_supported_choco_no_progress).at_least(:once)
         resource[:ensure] = :present
         expect(provider).to receive(:chocolatey).with('upgrade', 'chocolatey', '-y', nil, '--ignore-package-exit-codes', '--no-progress')
@@ -550,9 +544,6 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
       end
 
       it 'calls with no-progress when > 0.10.4 and package_settings: verbose is not true' do
-        allow(provider_class).to receive(:instances).and_return [provider_class.new(ensure: '1.2.3',
-                                                                                    name: 'chocolatey',
-                                                                                    provider: :chocolatey)]
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_version).and_return(choco_zero_eleven_zero).at_least(:once)
         resource[:ensure] = :present
         expect(provider).to receive(:chocolatey).with('upgrade', 'chocolatey', '-y', nil, '--ignore-package-exit-codes', '--no-progress')
@@ -561,9 +552,6 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
       end
 
       it 'does not call with no-progress when = 0.10.4 and package_settings: verbose is true' do
-        allow(provider_class).to receive(:instances).and_return [provider_class.new(ensure: '1.2.3',
-                                                                                    name: 'chocolatey',
-                                                                                    provider: :chocolatey)]
         expect(PuppetX::Chocolatey::ChocolateyCommon).to receive(:choco_version).and_return(minimum_supported_choco_no_progress).at_least(:once)
         resource[:package_settings] = { 'verbose' => true }
         resource[:ensure]           = :present
@@ -573,16 +561,13 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
       end
 
       it 'uses `chocolatey install` when ensure latest and package absent' do
-        allow(provider_class).to receive(:instances).and_return []
+        allow(provider).to receive(:query).and_return(nil)
         expect(provider).to receive(:chocolatey).with('install', 'chocolatey', '-y', nil)
 
         provider.update
       end
 
       it 'uses source if it is specified' do
-        expect(provider_class).to receive(:instances).and_return [provider_class.new(ensure: 'latest',
-                                                                                     name: 'chocolatey',
-                                                                                     provider: :chocolatey)]
         resource[:source] = 'c:\packages'
         expect(provider).to receive(:chocolatey).with('upgrade', 'chocolatey', '-y', '--source', 'c:\packages', nil)
 
@@ -590,9 +575,6 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
       end
 
       it 'calls the unhold method if the current package is on hold' do
-        expect(provider_class).to receive(:instances).and_return [provider_class.new(ensure: 'latest',
-                                                                                     name: 'chocolatey',
-                                                                                     provider: :chocolatey)]
         allow(provider).to receive(:on_hold?).and_return(true)
         expect(provider).to receive(:chocolatey).with('pin', 'remove', '-n', 'chocolatey')
         expect(provider).to receive(:chocolatey).with('upgrade', 'chocolatey', '-y', nil)
@@ -603,30 +585,25 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
 
     context 'with posh choco client' do
       before :each do
+        allow(provider).to receive(:query).and_return(present_package)
         allow(provider.class).to receive(:compiled_choco?).and_return(false)
         allow(PuppetX::Chocolatey::ChocolateyVersion).to receive(:version).and_return(last_posh_choco_version)
       end
 
       it 'uses `chocolatey update` when ensure latest and package present' do
-        allow(provider_class).to receive(:instances).and_return [provider_class.new(ensure: '1.2.3',
-                                                                                    name: 'chocolatey',
-                                                                                    provider: :chocolatey)]
         expect(provider).to receive(:chocolatey).with('update', 'chocolatey', nil)
 
         provider.update
       end
 
       it 'uses `chocolatey install` when ensure latest and package absent' do
-        allow(provider_class).to receive(:instances).and_return []
+        allow(provider).to receive(:query).and_return(nil)
         expect(provider).to receive(:chocolatey).with('install', 'chocolatey', nil)
 
         provider.update
       end
 
       it 'uses source if it is specified' do
-        expect(provider_class).to receive(:instances).and_return [provider_class.new(ensure: 'latest',
-                                                                                     name: 'chocolatey',
-                                                                                     provider: :chocolatey)]
         resource[:source] = 'c:\packages'
         expect(provider).to receive(:chocolatey).with('update', 'chocolatey', '--source', 'c:\packages', nil)
 
