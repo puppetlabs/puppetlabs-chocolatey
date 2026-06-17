@@ -238,12 +238,31 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
   # It's a determination for one specific package, the package modeled by
   # the resource the method is called on.
   # Query provides the information for the single package identified by @Resource[:name].
+  #
+  # The provider's @property_hash is populated by self.prefetch, which calls
+  # self.instances (and therefore `choco list`) exactly once per run. Reading
+  # from it here avoids re-invoking `choco.exe list -lo -r` for every resource
+  # that was not matched during prefetch. An empty hash means the package is
+  # not installed (absent), so there is nothing to re-query. See MODULES-11769.
   def query
-    self.class.instances.each do |package|
-      return package.properties if @resource[:name][%r{\A\S*}].casecmp(package.name.downcase).zero?
-    end
+    @property_hash.empty? ? nil : @property_hash.dup
+  end
 
-    nil
+  # Override the inherited Puppet::Provider::Package.prefetch, which matches
+  # instances to resources with a case-SENSITIVE hash lookup (packages[name]).
+  # self.instances downcases every package name returned by `choco list`, so a
+  # mixed-case resource title such as 'DotNetFx' never matches 'dotnetfx' and
+  # falls through to query, re-running `choco list`. Matching case-insensitively
+  # here populates @property_hash during the single prefetch pass instead.
+  # See MODULES-11769.
+  def self.prefetch(resources)
+    packages = instances
+    return if packages.nil?
+
+    resources.each do |name, resource|
+      provider = packages.find { |pkg| name.casecmp(pkg.name).zero? }
+      resource.provider = provider if provider
+    end
   end
 
   def self.listcmd
