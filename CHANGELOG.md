@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v9.0.0](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/v9.0.0) - 2026-06-28
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/v8.0.3...v9.0.0)
+
+### Changed
+
+- (CAT-2369) Puppetcore update [#378](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/378) ([LukasAud](https://github.com/LukasAud))
+
+### Other
+
+- (MODULES-11769) Cache prefetch results and match packages case-insensitively [#388](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/388) ([skyamgarp](https://github.com/skyamgarp))
+- (MODULES-11840) Allow puppetlabs/stdlib 10.x [#387](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/387) ([imaqsood](https://github.com/imaqsood))
+
 ## [v8.0.3](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/v8.0.3) - 2025-08-13
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/v8.0.2...v8.0.3)
