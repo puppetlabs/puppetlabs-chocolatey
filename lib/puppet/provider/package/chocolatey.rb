@@ -330,8 +330,9 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
   end
 
   def latest
-    package_ver = ''
+    package_ver = nil
     PuppetX::Chocolatey::ChocolateyCommon.set_env_chocolateyinstall
+    pkg_name = @resource[:name][%r{\A\S*}]
     begin
       execpipe(latestcmd) do |process|
         process.each_line do |line|
@@ -340,16 +341,39 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
 
           if compiled_choco?
             values = line.split('|')
-            package_ver = values[2]
+            # Skip lines that aren't a machine-readable data line for the
+            # requested package (warning/info output, SSL/cert error text,
+            # status lines, etc.).
+            next if values.length < 3
+            next unless values[0].casecmp(pkg_name).zero?
+            # `choco upgrade --noop <pkg> -r` output:
+            #   name|current|pinned            -> no update available (3 fields)
+            #   name|current|available|pinned  -> update available (4 fields)
+            candidate = (values.length >= 4) ? values[2] : values[1]
           else
             # Example: ( latest        : 2013.08.19.155043 )
             values = line.split(':').map(&:strip).delete_if(&:empty?)
-            package_ver = values[1]
+            next unless values.length >= 2 && values[0].casecmp('latest').zero?
+            candidate = values[1]
           end
+
+          # Only accept a version-shaped string. Guards against e.g. the
+          # `pinned` flag ("false") landing in the version field on
+          # malformed/short output.
+          next unless candidate.is_a?(String) && candidate.match?(%r{\A\d+(\.\d+)*\z})
+
+          package_ver = candidate
         end
       end
     rescue Puppet::ExecutionFailure
       return nil
+    end
+
+    if package_ver.nil?
+      raise Puppet::Error,
+            "Could not determine the latest version of #{pkg_name}: " \
+            'no parseable version was returned (the source may be unreachable ' \
+            'or its certificate may have expired)'
     end
 
     package_ver
