@@ -21,6 +21,11 @@
 * [`chocolateyfeature`](#chocolateyfeature): Allows managing features for Chocolatey. Features are configuration that act as feature flippers to turn on or off certain aspects of how Cho
 * [`chocolateysource`](#chocolateysource): Allows managing sources for Chocolatey. A source can be a folder, a CIFS share, a NuGet Http OData feed, or a full Package Gallery. Learn mor
 
+### Functions
+
+* [`chocolatey::escape`](#chocolatey--escape): Perform escaping and quoting for an install option
+* [`chocolatey::install_options`](#chocolatey--install_options): Perform escaping, and splitting of a number of install options
+
 ### Tasks
 
 * [`init`](#init): Manage a package
@@ -403,6 +408,76 @@ Default value: `''`
 
 The specific backend to use for this `chocolateysource` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
+
+## Functions
+
+### <a name="chocolatey--escape"></a>`chocolatey::escape`
+
+Type: Puppet Language
+
+Escapes double quotes, and wraps values containing spaces in double quotes.
+
+#### `chocolatey::escape(String $option)`
+
+Escapes double quotes, and wraps values containing spaces in double quotes.
+
+Returns: `String`
+
+##### `option`
+
+Data type: `String`
+
+An install option to be escaped
+
+### <a name="chocolatey--install_options"></a>`chocolatey::install_options`
+
+Type: Puppet Language
+
+Perform escaping, and splitting of a number of install options
+
+#### Examples
+
+##### 
+
+```puppet
+package {'mysql':
+  ensure          => latest,
+  provider        => 'chocolatey',
+  install_options => chocolatey::install_options(
+    '-override',
+    '-installArgs',
+    "/INSTALLDIR=${chocolatey::escape('C:\Program Files\somewhere'}",
+  ),
+}
+```
+
+#### `chocolatey::install_options(Array[String] $options)`
+
+The chocolatey::install_options function.
+
+Returns: `Array[String]`
+
+##### Examples
+
+###### 
+
+```puppet
+package {'mysql':
+  ensure          => latest,
+  provider        => 'chocolatey',
+  install_options => chocolatey::install_options(
+    '-override',
+    '-installArgs',
+    "/INSTALLDIR=${chocolatey::escape('C:\Program Files\somewhere'}",
+  ),
+}
+```
+
+##### `options`
+
+Data type: `Array[String]`
+
+An install option to be escaped
 
 ## Tasks
 
