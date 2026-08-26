@@ -5,7 +5,7 @@ on:
     branches:
       - "main"
   workflow_dispatch:
-    
+
 jobs:
   setup_matrix:
     name: "Setup Test Matrix"
@@ -17,10 +17,10 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v2
 
-      - name: Activate Ruby 2.7
+      - name: Activate Ruby 3.2
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "2.7"
+          ruby-version: "3.2"
           bundler-cache: true
 
       - name: Print bundle environment
@@ -47,7 +47,8 @@ jobs:
 
     env:
       PUPPET_GEM_VERSION: ${{ matrix.puppet_version }}
-      FACTER_GEM_VERSION: 'https://github.com/puppetlabs/facter#main'
+      FACTER_GEM_VERSION: 'https://github.com/puppetlabs/facter.git#main'
+      FORGE_TOKEN: ${{ secrets.PUPPET_FORGE_TOKEN || secrets.PUPPET_FORGE_TOKEN_PUBLIC }}
 
     steps:
 
@@ -82,5 +83,12 @@ jobs:
     needs: Spec
     uses: "puppetlabs/cat-github-actions/.github/workflows/module_acceptance.yml@main"
     with:
-      flags: "--latest-agent"
+      # Puppet 9 ships no agent for Windows Server 2012 / 2012 R2 (EOL).
+      # metadata.json still lists them for Puppet 8 compatibility, so exclude
+      # them from the Puppet 9 lane only.
+      flags: >-
+        --nightly
+        --collection-platform-exclude 9:windows-2012
+        --collection-platform-exclude 9:windows-2012_r2
+      ruby_version: "3.2"
     secrets: "inherit"
