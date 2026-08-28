@@ -40,7 +40,7 @@ describe 'chocolatey' do
   end
 
   context 'chocolatey_download_url =>' do
-    ['https://chocolatey.org/api/v2/package/chocolatey/', 'http://location', 'file:///c:/somwhere/chocolatey.nupkg', '\\\\ciflocation\\share'].each do |param_value|
+    ['https://community.chocolatey.org/api/v2/package/chocolatey/', 'http://location', 'file:///c:/somwhere/chocolatey.nupkg', '\\\\ciflocation\\share'].each do |param_value|
       context param_value.to_s do
         let(:params) do
           {

@@ -10,7 +10,7 @@ Puppet::Type.newtype(:chocolateyconfig) do
     to configure aspects of Chocolatey and the way it
     functions. Similar to features, except allow for user
     configured values. Requires 0.9.10+. Learn more about
-    config at https://chocolatey.org/docs/commands-config
+    config at https://docs.chocolatey.org/en-us/features/host-packages/
   DOC
 
   ensurable do
