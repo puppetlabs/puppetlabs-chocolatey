@@ -5,7 +5,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [v9.0.0](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/v9.0.0) - 2026-06-28
+## [v9.1.0](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/v9.1.0) - 2026-09-10
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/v9.0.0...v9.1.0)
+
+### Added
+
+- (MODULES-11731) Add Puppet 9 support [#390](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/390) ([shubhamshinde360](https://github.com/shubhamshinde360))
+
+### Other
+
+- (MODULES-11708) Widen puppetlabs/registry dependency to allow 6.x [#392](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/392) ([span786](https://github.com/span786))
+
+## [v9.0.0](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/v9.0.0) - 2026-06-29
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/v8.0.3...v9.0.0)
 
