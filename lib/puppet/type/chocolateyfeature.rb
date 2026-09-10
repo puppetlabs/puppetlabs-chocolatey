@@ -9,7 +9,7 @@ Puppet::Type.newtype(:chocolateyfeature) do
     configuration that act as feature flippers to turn on or
     off certain aspects of how Chocolatey works.
     Learn more about features at
-    https://chocolatey.org/docs/commands-feature
+    https://docs.chocolatey.org/en-us/choco/commands/feature/
 
   EOT
 

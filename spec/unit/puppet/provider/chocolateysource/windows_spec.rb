@@ -32,7 +32,7 @@ describe provider do
         </config>
         <sources>
           <source id="local" value="c:\packages" disabled="true" user="rob" password="bogus/encrypted+value=" priority="0" />
-          <source id="chocolatey" value="https://chocolatey.org/api/v2/" disabled="false" priority="0" />
+          <source id="chocolatey" value="https://community.chocolatey.org/api/v2/" disabled="false" priority="0" />
           <source id="chocolatey.licensed" value="https://licensedpackages.chocolatey.org/api/v2/" disabled="false" user="customer" password="bogus/encrypted+value=" priority="10" />
         </sources>
         <features>
