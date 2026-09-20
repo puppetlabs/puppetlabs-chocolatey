@@ -656,14 +656,14 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
                                                          "Unable to connect to source 'https://example.com/v3/index.json'\n",
                                                        ))
         expect { provider.latest }.to raise_error(
-          Puppet::Error, %r{Could not determine the latest version of chocolatey},
+          Puppet::Error, %r{Could not determine the latest version of chocolatey}
         )
       end
 
       it 'raises Puppet::Error when execpipe yields no output' do
         allow(provider).to receive(:execpipe).and_yield(StringIO.new(''))
         expect { provider.latest }.to raise_error(
-          Puppet::Error, %r{Could not determine the latest version of chocolatey},
+          Puppet::Error, %r{Could not determine the latest version of chocolatey}
         )
       end
 
@@ -673,14 +673,14 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
         # propagate "false" as a version.
         allow(provider).to receive(:execpipe).and_yield(StringIO.new("chocolatey|18.1|false|false\n"))
         expect { provider.latest }.to raise_error(
-          Puppet::Error, %r{Could not determine the latest version of chocolatey},
+          Puppet::Error, %r{Could not determine the latest version of chocolatey}
         )
       end
 
       it 'ignores data lines for a different package' do
         allow(provider).to receive(:execpipe).and_yield(StringIO.new("someotherpkg|1.0|2.0|false\n"))
         expect { provider.latest }.to raise_error(
-          Puppet::Error, %r{Could not determine the latest version of chocolatey},
+          Puppet::Error, %r{Could not determine the latest version of chocolatey}
         )
       end
 
@@ -716,7 +716,7 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
       it 'raises Puppet::Error when posh output has no latest line' do
         allow(provider).to receive(:execpipe).and_yield(StringIO.new("Unable to connect to source 'https://example.com/'\n"))
         expect { provider.latest }.to raise_error(
-          Puppet::Error, %r{Could not determine the latest version of chocolatey},
+          Puppet::Error, %r{Could not determine the latest version of chocolatey}
         )
       end
     end
