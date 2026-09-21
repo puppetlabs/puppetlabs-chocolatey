@@ -16,15 +16,6 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v2
 
-      - name: "Configure forge authentication"
-        env:
-          FORGE_TOKEN: ${{ secrets.PUPPET_FORGE_TOKEN || secrets.PUPPET_FORGE_TOKEN_PUBLIC }}
-        run: |
-          if [ -n "$FORGE_TOKEN" ]; then
-            echo "PUPPET_FORGE_TOKEN=$FORGE_TOKEN" >> $GITHUB_ENV
-            echo "BUNDLE_RUBYGEMS___PUPPETCORE__PUPPET__COM=forge-key:$FORGE_TOKEN" >> $GITHUB_ENV
-          fi
-
       - name: Activate Ruby 3.2
         uses: ruby/setup-ruby@v1
         with:
@@ -61,15 +52,6 @@ jobs:
 
       - name: Checkout Source
         uses: actions/checkout@v2
-
-      - name: "Configure forge authentication"
-        env:
-          FORGE_TOKEN: ${{ secrets.PUPPET_FORGE_TOKEN || secrets.PUPPET_FORGE_TOKEN_PUBLIC }}
-        run: |
-          if [ -n "$FORGE_TOKEN" ]; then
-            echo "PUPPET_FORGE_TOKEN=$FORGE_TOKEN" >> $GITHUB_ENV
-            echo "BUNDLE_RUBYGEMS___PUPPETCORE__PUPPET__COM=forge-key:$FORGE_TOKEN" >> $GITHUB_ENV
-          fi
 
       - name: "Activate Ruby ${{ matrix.ruby_version }}"
         uses: ruby/setup-ruby@v1
