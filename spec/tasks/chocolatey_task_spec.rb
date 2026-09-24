@@ -81,4 +81,19 @@ describe ChocolateyTask do
       it { is_expected.to eq(nil) }
     end
   end
+
+  # MODULES-11957: Bolt and PE add their own metaparameters to the task input,
+  # which TaskHelper.run splats into `task`, so the signature has to tolerate
+  # keywords it does not declare.
+  context 'when the runner passes its own metaparameters' do
+    subject { described_class.new.task(action: action, package: package, version: version, _task: 'chocolatey', _installdir: 'C:/Windows/Temp/install') }
+
+    let(:action) { 'install' }
+
+    before(:each) do
+      allow(Open3).to receive(:capture2).with('choco', 'install', 'puppet-bolt', '--yes', '--no-color', '--no-progress').and_return(['', sucess_status])
+    end
+
+    it { is_expected.to eq(nil) }
+  end
 end
