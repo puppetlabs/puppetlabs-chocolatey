@@ -154,9 +154,10 @@ describe provider do
 
     element_name = 'default'
     element_enabled = 'true'
+    element_set_explicitly = 'true'
 
     before :each do
-      element.add_attributes('name' => element_name, 'enabled' => element_enabled)
+      element.add_attributes('name' => element_name, 'enabled' => element_enabled, 'setExplicitly' => element_set_explicitly)
     end
 
     it 'returns nil feature when element is nil' do
@@ -176,6 +177,14 @@ describe provider do
 
       feature = provider_class.get_choco_feature(element)
       expect(feature[:ensure]).to eq(:disabled)
+    end
+
+    it 'when feature is not set explicitly' do
+      element.delete_attribute('setExplicitly')
+      element.add_attribute('setExplicitly', 'false')
+
+      feature = provider_class.get_choco_feature(element)
+      expect(feature[:ensure]).to eq(:not_explicit)
     end
   end
 end
