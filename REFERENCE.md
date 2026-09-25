@@ -129,9 +129,9 @@ Data type: `String[1]`
 Specifies the source file for 7za.exe.
 Supports all sources supported by Puppet's file resource. You should use
 a 32bit binary for compatibility.
-Defaults to 'https://chocolatey.org/7za.exe'.
+Defaults to 'https://community.chocolatey.org/7za.exe'.
 
-Default value: `'https://chocolatey.org/7za.exe'`
+Default value: `'https://community.chocolatey.org/7za.exe'`
 
 ##### <a name="-chocolatey--choco_install_timeout_seconds"></a>`choco_install_timeout_seconds`
 
@@ -150,9 +150,9 @@ Data type: `Stdlib::Filesource`
 A url that will return
 `chocolatey.nupkg`. This must be a url, but not necessarily an OData feed.
 Any old url location will work. Defaults to
-`'https://chocolatey.org/api/v2/package/chocolatey/'`.
+`'https://community.chocolatey.org/api/v2/package/chocolatey/'`.
 
-Default value: `'https://chocolatey.org/api/v2/package/chocolatey/'`
+Default value: `'https://community.chocolatey.org/api/v2/package/chocolatey/'`
 
 ##### <a name="-chocolatey--enable_autouninstaller"></a>`enable_autouninstaller`
 
@@ -203,7 +203,7 @@ Configuration values provide settings for users
 to configure aspects of Chocolatey and the way it
 functions. Similar to features, except allow for user
 configured values. Requires 0.9.10+. Learn more about
-config at https://chocolatey.org/docs/commands-config
+config at https://docs.chocolatey.org/en-us/choco/commands/config/
 
 #### Properties
 
@@ -251,7 +251,7 @@ Allows managing features for Chocolatey. Features are
 configuration that act as feature flippers to turn on or
 off certain aspects of how Chocolatey works.
 Learn more about features at
-https://chocolatey.org/docs/commands-feature
+https://docs.chocolatey.org/en-us/choco/commands/feature/
 
 #### Properties
 
@@ -286,7 +286,7 @@ usually discover the appropriate provider for your platform.
 Allows managing sources for Chocolatey. A source can be a
 folder, a CIFS share, a NuGet Http OData feed, or a full
 Package Gallery. Learn more about sources at
-https://chocolatey.org/docs/how-to-host-feed
+https://docs.chocolatey.org/en-us/features/host-packages/
 
 #### Properties
 

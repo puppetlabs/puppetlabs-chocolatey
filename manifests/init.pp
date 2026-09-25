@@ -47,7 +47,7 @@
 # @param [String] seven_zip_download_url Specifies the source file for 7za.exe.
 #   Supports all sources supported by Puppet's file resource. You should use
 #   a 32bit binary for compatibility.
-#   Defaults to 'https://chocolatey.org/7za.exe'.
+#   Defaults to 'https://community.chocolatey.org/7za.exe'.
 #
 # @param [Integer] choco_install_timeout_seconds How long in seconds should
 #   be allowed for the install of Chocolatey (including .NET Framework 4 if
@@ -56,7 +56,7 @@
 # @param [String] chocolatey_download_url A url that will return
 #   `chocolatey.nupkg`. This must be a url, but not necessarily an OData feed.
 #   Any old url location will work. Defaults to
-#   `'https://chocolatey.org/api/v2/package/chocolatey/'`.
+#   `'https://community.chocolatey.org/api/v2/package/chocolatey/'`.
 #
 # @param [Boolean] enable_autouninstaller [Deprecated] - Should auto
 #   uninstaller be turned on? Auto uninstaller is what allows Chocolatey to
@@ -76,9 +76,9 @@
 class chocolatey (
   Stdlib::Windowspath $choco_install_location = $facts['choco_install_path'],
   Boolean $use_7zip                           = false,
-  String[1] $seven_zip_download_url           = 'https://chocolatey.org/7za.exe',
+  String[1] $seven_zip_download_url           = 'https://community.chocolatey.org/7za.exe',
   Integer $choco_install_timeout_seconds      = 1500,
-  Stdlib::Filesource $chocolatey_download_url = 'https://chocolatey.org/api/v2/package/chocolatey/',
+  Stdlib::Filesource $chocolatey_download_url = 'https://community.chocolatey.org/api/v2/package/chocolatey/',
   Boolean $enable_autouninstaller             = true,
   Boolean $log_output                         = false,
   String[1] $chocolatey_version               = $facts['chocolateyversion'],
