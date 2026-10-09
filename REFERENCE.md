@@ -129,9 +129,9 @@ Data type: `String[1]`
 Specifies the source file for 7za.exe.
 Supports all sources supported by Puppet's file resource. You should use
 a 32bit binary for compatibility.
-Defaults to 'https://chocolatey.org/7za.exe'.
+Defaults to 'https://community.chocolatey.org/7za.exe'.
 
-Default value: `'https://chocolatey.org/7za.exe'`
+Default value: `'https://community.chocolatey.org/7za.exe'`
 
 ##### <a name="-chocolatey--choco_install_timeout_seconds"></a>`choco_install_timeout_seconds`
 
@@ -150,9 +150,9 @@ Data type: `Stdlib::Filesource`
 A url that will return
 `chocolatey.nupkg`. This must be a url, but not necessarily an OData feed.
 Any old url location will work. Defaults to
-`'https://chocolatey.org/api/v2/package/chocolatey/'`.
+`'https://community.chocolatey.org/api/v2/package/chocolatey/'`.
 
-Default value: `'https://chocolatey.org/api/v2/package/chocolatey/'`
+Default value: `'https://community.chocolatey.org/api/v2/package/chocolatey/'`
 
 ##### <a name="-chocolatey--enable_autouninstaller"></a>`enable_autouninstaller`
 
