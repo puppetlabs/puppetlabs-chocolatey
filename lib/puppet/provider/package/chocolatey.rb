@@ -274,6 +274,19 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
     [command(:chocolatey), *args]
   end
 
+  # `choco pin list` re-reads every installed package (seconds per run); each pin is a `.pin`
+  # marker file under `.chocolatey\<id>.<version>`, so a glob tells us whether the call can be skipped.
+  # Returns true (run `choco pin list`) whenever the store cannot be inspected.
+  def self.pins_present?
+    install_path = Facter.value('choco_install_path') || PuppetX::Chocolatey::ChocolateyInstall.install_path
+    return true if install_path.nil?
+
+    store = File.join(install_path.tr('\\', '/'), '.chocolatey')
+    return true unless Dir.exist?(store)
+
+    !Dir.glob(File.join(store, '*', '.pin')).empty?
+  end
+
   def self.instances
     packages = []
     PuppetX::Chocolatey::ChocolateyCommon.set_env_chocolateyinstall
@@ -282,7 +295,7 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
       pins = []
       pin_output = nil unless choco_exe
       # don't add -r yet, as there is an issue in 0.9.9.9/0.9.9.10 that returns full list plus pins
-      pin_output = Puppet::Util::Execution.execute([command(:chocolatey), 'pin', 'list'], { sensitive: true }) if choco_exe
+      pin_output = Puppet::Util::Execution.execute([command(:chocolatey), 'pin', 'list'], { sensitive: true }) if choco_exe && pins_present?
       pin_output&.split("\n")&.each { |pin| pins << pin.split('|')[0] }
 
       execpipe(listcmd) do |process|
