@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v9.1.1](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/v9.1.1) - 2026-10-12
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/v9.1.0...v9.1.1)
+
+### Other
+
+- (MODULES-11971) Move ci and nightly to module_ci on Ruby 3.2, fix CCR URLs [#401](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/401) ([imaqsood](https://github.com/imaqsood))
+- (MODULES-11957) Accept runner metaparameters in chocolatey tasks [#399](https://github.com/puppetlabs/puppetlabs-chocolatey/pull/399) ([imaqsood](https://github.com/imaqsood))
+
 ## [v9.1.0](https://github.com/puppetlabs/puppetlabs-chocolatey/tree/v9.1.0) - 2026-09-10
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-chocolatey/compare/v9.0.0...v9.1.0)
