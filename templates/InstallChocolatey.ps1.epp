@@ -93,6 +93,28 @@ param (
   $downloader.DownloadFile($url, $file)
 }
 
+# The unversioned community feed url (the historical default for chocolatey_download_url) is not an officially supported endpoint and has returned intermittent 5xx errors. 
+# Resolve it to the current versioned package url the same way the official install.ps1 does, instead of downloading from it directly.
+if ($url -match '^https?://(www\.|community\.)?chocolatey\.org/api/v2/package/chocolatey/?$') {
+  Write-Output "Determining latest Chocolatey package download url from the Chocolatey community API"
+  $queryString = [uri]::EscapeUriString("((Id eq 'chocolatey') and (not IsPrerelease)) and IsLatestVersion")
+  $queryUrl = 'https://community.chocolatey.org/api/v2/Packages()?$filter={0}' -f $queryString
+
+  $invokeWebRequestArgs = @{
+    Uri             = $queryUrl
+    UseBasicParsing = $true
+  }
+  if ($install_proxy) {
+    $invokeWebRequestArgs.Proxy = $install_proxy
+  }
+
+  [xml]$result = Invoke-WebRequest @invokeWebRequestArgs
+  $resolvedUrl = $result.feed.entry.content.src
+  if ($resolvedUrl) {
+    $url = $resolvedUrl
+  }
+}
+
 # download the package
 Download-File $url $file
 
