@@ -209,7 +209,7 @@ chocolateysource {'chocolatey':
 ~~~puppet
 chocolateysource {'chocolatey':
   ensure   => present,
-  location => 'https://chocolatey.org/api/v2',
+  location => 'https://community.chocolatey.org/api/v2/',
   priority => 1,
 }
 ~~~
@@ -476,7 +476,7 @@ package { 'notepadplusplus':
 package { 'notepadplusplus':
   ensure   => '6.7.5',
   provider => 'chocolatey',
-  source   => 'C:\local\folder\packages;https://chocolatey.org/api/v2/',
+  source   => 'C:\local\folder\packages;https://community.chocolatey.org/api/v2/',
 }
 ~~~
 
@@ -552,7 +552,7 @@ However, this information is not written to puppetdb or any other Puppet logs.
 
 It **is** written to the Chocolatey log on each machine unless you have C4B and use the `--package-parameters-sensitive` or `--install-arguments-sensitive` Chocolatey parameters, which will redact specified values from the Chocolatey log.
 
-For more information on these Chocolatey parameters, see the Chocolatey reference documentation on the [install command](https://chocolatey.org/docs/commands-install#options-and-switches) and the [upgrade command](https://chocolatey.org/docs/commands-upgrade#options-and-switches).
+For more information on these Chocolatey parameters, see the Chocolatey reference documentation on the [install command](https://docs.chocolatey.org/en-us/choco/commands/install/#options-and-switches) and the [upgrade command](https://docs.chocolatey.org/en-us/choco/commands/upgrade/#options-and-switches).
 
 If you need to include a secret in your `install_options`, do not run in debug mode in production and use C4B and the `--package-parameters-sensitive` or `--install-arguments-sensitive` Chocolatey parameter.
 
