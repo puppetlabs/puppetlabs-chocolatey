@@ -418,13 +418,15 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
 
   def all_versions_cmd
     choco_exe = compiled_choco?
+    # Chocolatey 2.0+ `list` is local-only; `search` queries sources and exists on every compiled client.
     args = [
-      'list',
+      choco_exe ? 'search' : 'list',
       @resource[:name][%r{\A\S*}],
       '-a',
     ]
 
-    args << '-r' if choco_exe
+    # `--exact` stops search from returning versions of other packages whose name or description matches.
+    args << '-r' << '--exact' if choco_exe
     args << '--source' << @resource[:source] if @resource[:source]
     [command(:chocolatey), *args]
   end
