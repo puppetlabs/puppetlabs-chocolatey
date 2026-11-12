@@ -24,7 +24,7 @@ class ChocolateyOutdatedTask < TaskHelper
         package: parts[0],
         version: parts[1],
         available_version: parts[2],
-        pinned: parts[3] == 'true'
+        pinned: parts[3] == 'true',
       }
     end
 
