@@ -33,10 +33,13 @@ Puppet::Type.type(:package).provide(:chocolatey, parent: Puppet::Provider::Packa
   has_feature :package_settings
   has_feature :version_ranges
 
-  if Puppet::Util::Platform.windows?
-    require 'puppet/util/package/version/range'
-    require 'puppet/util/package/version/gem'
-  end
+  require 'puppet/util/package/version/range'
+  require 'puppet/util/package/version/gem'
+  require 'puppet/util/package/version/debian'
+  GEM_VERSION       = Puppet::Util::Package::Version::Gem
+  GEM_VERSION_RANGE = Puppet::Util::Package::Version::Range
+  VersionRange      = Puppet::Util::Package::Version::Range
+  DebianVersion     = Puppet::Util::Package::Version::Debian
 
   require Pathname.new(__FILE__).dirname + '../../../' + 'puppet_x/chocolatey/chocolatey_common'
   include PuppetX::Chocolatey::ChocolateyCommon
