@@ -203,7 +203,7 @@ Configuration values provide settings for users
 to configure aspects of Chocolatey and the way it
 functions. Similar to features, except allow for user
 configured values. Requires 0.9.10+. Learn more about
-config at https://chocolatey.org/docs/commands-config
+config at https://docs.chocolatey.org/en-us/choco/commands/config/
 
 #### Properties
 
@@ -251,7 +251,7 @@ Allows managing features for Chocolatey. Features are
 configuration that act as feature flippers to turn on or
 off certain aspects of how Chocolatey works.
 Learn more about features at
-https://chocolatey.org/docs/commands-feature
+https://docs.chocolatey.org/en-us/choco/commands/feature/
 
 #### Properties
 
@@ -286,7 +286,7 @@ usually discover the appropriate provider for your platform.
 Allows managing sources for Chocolatey. A source can be a
 folder, a CIFS share, a NuGet Http OData feed, or a full
 Package Gallery. Learn more about sources at
-https://chocolatey.org/docs/how-to-host-feed
+https://docs.chocolatey.org/en-us/features/host-packages/
 
 #### Properties
 

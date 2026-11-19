@@ -18,7 +18,7 @@ describe 'chocolateysource resource' do
       <<-MANIFEST
         chocolateysource {'chocolatey':
           ensure             => present,
-          location           => 'https://chocolatey.org/api/v2',
+          location           => 'https://community.chocolatey.org/api/v2/',
           priority           => 2,
           user               => 'bob',
           password           => 'yes',
@@ -35,7 +35,7 @@ describe 'chocolateysource resource' do
         expect(result.stdout).to match(%r{Debug: Executing: '\[redacted\]'})
       end
       run_shell(config_content_command, acceptable_exit_codes: [0]) do |result|
-        expect(get_xml_value("//sources/source[@id='chocolatey']/@value", result.stdout).to_s).to match(%r{https://chocolatey.org/api/v2})
+        expect(get_xml_value("//sources/source[@id='chocolatey']/@value", result.stdout).to_s).to match(%r{https://community.chocolatey.org/api/v2/})
         expect(get_xml_value("//sources/source[@id='chocolatey']/@priority", result.stdout).to_s).to match(%r{2})
         expect(get_xml_value("//sources/source[@id='chocolatey']/@user", result.stdout).to_s).to match(%r{bob})
         expect(get_xml_value("//sources/source[@id='chocolatey']/@password", result.stdout).to_s).to match(%r{.+})
@@ -54,7 +54,7 @@ describe 'chocolateysource resource' do
       <<-MANIFEST
         chocolateysource {'chocolatey':
           ensure             => present,
-          location           => 'https://chocolatey.org/api/v2',
+          location           => 'https://community.chocolatey.org/api/v2/',
           priority           => 2,
           user               => 'bob',
           password           => 'yes',
@@ -106,7 +106,7 @@ describe 'chocolateysource resource' do
       <<-MANIFEST
         chocolateysource {'chocolatey':
           ensure             => present,
-          location           => 'https://chocolatey.org/api/v2',
+          location           => 'https://community.chocolatey.org/api/v2/',
           priority           => 2,
           user               => 'bob',
           password           => 'yes',
@@ -121,7 +121,7 @@ describe 'chocolateysource resource' do
       <<-MANIFEST
         chocolateysource {'chocolatey':
           ensure   => present,
-          location => 'https://chocolatey.org/api/v2',
+          location => 'https://community.chocolatey.org/api/v2/',
         }
       MANIFEST
     end
@@ -129,7 +129,7 @@ describe 'chocolateysource resource' do
     it 'applies manifest, sets config' do
       idempotent_apply(pp_chocolateysource)
       run_shell(config_content_command) do |result|
-        expect(get_xml_value("//sources/source[@id='chocolatey']/@value", result.stdout).to_s).to match(%r{https://chocolatey.org/api/v2})
+        expect(get_xml_value("//sources/source[@id='chocolatey']/@value", result.stdout).to_s).to match(%r{https://community.chocolatey.org/api/v2/})
         expect(get_xml_value("//sources/source[@id='chocolatey']/@priority", result.stdout).to_s).to match(%r{2})
         expect(get_xml_value("//sources/source[@id='chocolatey']/@user", result.stdout).to_s).to match(%r{bob})
         expect(get_xml_value("//sources/source[@id='chocolatey']/@password", result.stdout).to_s).to match(%r{.+})
@@ -143,7 +143,7 @@ describe 'chocolateysource resource' do
     it 'applies manifest, unsets config attributes' do
       idempotent_apply(pp_chocolateysource_remove)
       run_shell(config_content_command) do |result|
-        expect(get_xml_value("//sources/source[@id='chocolatey']/@value", result.stdout).to_s).to match(%r{https://chocolatey.org/api/v2})
+        expect(get_xml_value("//sources/source[@id='chocolatey']/@value", result.stdout).to_s).to match(%r{https://community.chocolatey.org/api/v2/})
         expect(get_xml_value("//sources/source[@id='chocolatey']/@priority", result.stdout).to_s).to match(%r{0})
         expect(get_xml_value("//sources/source[@id='chocolatey']/@user", result.stdout).to_s).to match(%r{})
         expect(get_xml_value("//sources/source[@id='chocolatey']/@password", result.stdout).to_s).to match(%r{})
@@ -237,7 +237,7 @@ describe 'chocolateysource resource' do
         <<-MANIFEST
           chocolateysource {'chocolatey':
             ensure   => present,
-            location => 'https://chocolatey.org/api/v2',
+            location => 'https://community.chocolatey.org/api/v2/',
             password => 'test',
           }
         MANIFEST
@@ -256,7 +256,7 @@ describe 'chocolateysource resource' do
         <<-MANIFEST
           chocolateysource {'chocolatey':
             ensure   => present,
-            location => 'https://chocolatey.org/api/v2',
+            location => 'https://community.chocolatey.org/api/v2/',
             user => 'tim',
           }
         MANIFEST

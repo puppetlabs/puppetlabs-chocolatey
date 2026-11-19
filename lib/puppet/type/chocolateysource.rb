@@ -8,7 +8,7 @@ Puppet::Type.newtype(:chocolateysource) do
     Allows managing sources for Chocolatey. A source can be a
     folder, a CIFS share, a NuGet Http OData feed, or a full
     Package Gallery. Learn more about sources at
-    https://chocolatey.org/docs/how-to-host-feed
+    https://docs.chocolatey.org/en-us/features/host-packages/
 
   EOT
 
