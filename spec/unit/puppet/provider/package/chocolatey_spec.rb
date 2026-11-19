@@ -318,7 +318,7 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
 
       it 'finds highest available version within range' do
         resource[:ensure] = '>18.1 <19'
-        allow(provider).to receive(:execpipe).with([nil, 'list', 'chocolatey', '-a', '-r']).and_yield(all_versions)
+        allow(provider).to receive(:execpipe).with([nil, 'search', 'chocolatey', '-a', '-r', '--exact']).and_yield(all_versions)
         allow(provider).to receive(:latestcmd).and_return('chocolatey|18.1|19.0|false')
         expect(provider).to receive(:chocolatey).with('upgrade', 'chocolatey', '--version', '18.9', '-y', nil)
 
@@ -327,7 +327,7 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
 
       it 'fails if no version matching version range can be found' do
         resource[:ensure] = '>8.1 <9'
-        allow(provider).to receive(:execpipe).with([nil, 'list', 'chocolatey', '-a', '-r']).and_yield(all_versions)
+        allow(provider).to receive(:execpipe).with([nil, 'search', 'chocolatey', '-a', '-r', '--exact']).and_yield(all_versions)
         allow(provider).to receive(:latestcmd).and_return('chocolatey|18.1|19.0|false')
         expect {
           provider.install
@@ -669,6 +669,38 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
       it 'is not in sync when existing version is outside of version range' do
         resource[:ensure] = '>18.1 <19'
         expect(provider.insync?('17.5.1')).to be false
+      end
+    end
+  end
+
+  context 'self.all_versions_cmd' do
+    context 'with compiled choco client' do
+      before :each do
+        allow(provider.class).to receive(:compiled_choco?).and_return(true)
+      end
+
+      it 'queries sources with search rather than the local-only list' do
+        expect(provider.all_versions_cmd).to eq([nil, 'search', 'chocolatey', '-a', '-r', '--exact'])
+      end
+
+      it 'passes the source when specified' do
+        resource[:source] = 'c:\packages'
+        expect(provider.all_versions_cmd).to eq([nil, 'search', 'chocolatey', '-a', '-r', '--exact', '--source', 'c:\packages'])
+      end
+
+      it 'only uses the package name from a name with trailing arguments' do
+        resource[:name] = 'chocolatey --pre'
+        expect(provider.all_versions_cmd.drop(1).first(2)).to eq(['search', 'chocolatey'])
+      end
+    end
+
+    context 'with posh choco client' do
+      before :each do
+        allow(provider.class).to receive(:compiled_choco?).and_return(false)
+      end
+
+      it 'keeps using list' do
+        expect(provider.all_versions_cmd).to eq([nil, 'list', 'chocolatey', '-a'])
       end
     end
   end
