@@ -726,6 +726,41 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
     end
   end
 
+  context 'self.pins_present?' do
+    let(:store) { 'C:/ProgramData/chocolatey/.chocolatey' }
+
+    before :each do
+      allow(Facter).to receive(:value).with('choco_install_path').and_return('C:\\ProgramData\\chocolatey')
+    end
+
+    it 'is true when a .pin marker exists' do
+      allow(Dir).to receive(:exist?).with(store).and_return(true)
+      allow(Dir).to receive(:glob).with("#{store}/*/.pin").and_return(["#{store}/git.2.45.0/.pin"])
+
+      expect(provider_class.pins_present?).to eq(true)
+    end
+
+    it 'is false when the store has no .pin markers' do
+      allow(Dir).to receive(:exist?).with(store).and_return(true)
+      allow(Dir).to receive(:glob).with("#{store}/*/.pin").and_return([])
+
+      expect(provider_class.pins_present?).to eq(false)
+    end
+
+    it 'is true when the store does not exist' do
+      allow(Dir).to receive(:exist?).with(store).and_return(false)
+
+      expect(provider_class.pins_present?).to eq(true)
+    end
+
+    it 'is true when the install path is unknown' do
+      allow(Facter).to receive(:value).with('choco_install_path').and_return(nil)
+      allow(PuppetX::Chocolatey::ChocolateyInstall).to receive(:install_path).and_return(nil)
+
+      expect(provider_class.pins_present?).to eq(true)
+    end
+  end
+
   context 'when fetching a package list' do
     it 'invokes provider listcmd' do
       expect(provider_class).to receive(:listcmd)
@@ -771,7 +806,18 @@ describe Puppet::Type.type(:package).provider(:chocolatey) do
                                                name: 'package2')
         end
 
+        it 'skips `choco pin list` when no pins exist' do
+          allow(provider_class).to receive(:pins_present?).and_return(false)
+          expect(provider_class).to receive(:execpipe).and_yield(StringIO.new(%(package1|1.23\n)))
+          expect(Puppet::Util::Execution).not_to receive(:execute)
+
+          packages = provider_class.instances
+
+          expect(packages[0].properties).to eq(provider: :chocolatey, ensure: '1.23', name: 'package1')
+        end
+
         it 'returns installed packages with their versions and mark propperty' do
+          allow(provider_class).to receive(:pins_present?).and_return(true)
           expect(provider_class).to receive(:execpipe).and_yield(StringIO.new(%(package1|1.23\n\package2|2.00\n\package3|3.00\n)))
           expect(Puppet::Util::Execution).to receive(:execute).and_return("Chocolatey v0.10.15 Business\npackage1|1.23|\npackage2|2.0|\n")
 
